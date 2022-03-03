@@ -6,6 +6,15 @@
 		"list": "cpp",
 		"string": "cpp",
 		"vector": "cpp",
-		"string_view": "cpp"
+		"string_view": "cpp",
+		"__bit_reference": "cpp",
+		"__hash_table": "cpp",
+		"__split_buffer": "cpp",
+		"atomic": "cpp",
+		"bitset": "cpp",
+		"functional": "cpp",
+		"iterator": "cpp",
+		"memory": "cpp",
+		"unordered_map": "cpp"
 	}
 }

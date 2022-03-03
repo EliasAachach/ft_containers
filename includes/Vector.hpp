@@ -27,12 +27,12 @@ template < typename T, class Alloc = std::allocator<T> >
 			typedef typename Alloc::const_reference	const_reference;
 			typedef typename Alloc::pointer			pointer;
 			typedef typename Alloc::const_pointer	const_pointer;
-			iterator
-			const_iterator
-			reverse_iterator
-			const_reverse_iterator
-			difference_type
-			size_type
+			typedef typename iterator
+			typedef typename const_iterator
+			typedef typename reverse_iterator
+			typedef typename const_reverse_iterator
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type
+			typedef typename size_type
 
 		private:
 
