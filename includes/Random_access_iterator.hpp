@@ -10,13 +10,36 @@ namespace ft
 	template <typename T>
 	class Random_access_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
 	{
+		private:
+			pointer	_elem;
 
 		public:
 
-			typedef	ft::iterator<ft::random_access_iterator_tag, T>::pointer	pointer;
-			Random_access_iterator();
-			Random_access_iterator( Random_access_iterator const & src );
-			~Random_access_iterator();
+			typedef	typename	ft::iterator<ft::random_access_iterator_tag, T>::pointer			pointer;
+			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::value_type			value_type;
+			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type;
+			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
+
+			/*	default constructor	*/
+			Random_access_iterator(): _elem(0)
+			{
+			}
+
+			/*	copy constructor	*/
+			Random_access_iterator( Random_access_iterator const & src ): _elem(src.base())
+			{
+			}
+
+			/*	constructor from a pointer	*/
+			Random_access_iterator(pointer elem): _elem(elem)
+			{
+			}
+
+			/*	destructor	*/
+			~Random_access_iterator():
+			{
+			}
 
 	/********************************/
 	/*			ACCESSORS			*/
@@ -74,10 +97,14 @@ namespace ft
 				_elem -= rhs.base();
 				return (*this);
 			}
-			Random_access_iterator			operator*(void)
+			reference			operator*(void) const
 			{
 				return (*_elem);
-			} 
+			}
+			pointer				operator->(void) const
+			{
+				return (&(this->_elem));
+			}
 	/********************************/
 	/*	Incrementation Operators	*/
 	/********************************/
@@ -108,8 +135,6 @@ namespace ft
 				return (*(operator+(n)));
 			}
 
-		private:
-			pointer	_elem;
 
 	};
 
