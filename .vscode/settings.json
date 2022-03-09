@@ -15,6 +15,7 @@
 		"functional": "cpp",
 		"iterator": "cpp",
 		"memory": "cpp",
-		"unordered_map": "cpp"
+		"unordered_map": "cpp",
+		"ranges": "cpp"
 	}
 }
