@@ -20,14 +20,37 @@ namespace	ft
 
 	public:
 
-		typedef Iterator                        iterator_type;
-		typedef typename iterator_traits<Iterator>::difference_type	difference_type;
-		typedef typename iterator_traits<Iterator>::reference   reference;
-		typedef typename iterator_traits<Iterator>::pointer     pointer;
+		typedef _Iterator												iterator_type;
+		typedef typename iterator_traits<Iterator>::difference_type		difference_type;
+		typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
+		typedef typename iterator_traits<Iterator>::reference			reference;
+		typedef typename iterator_traits<Iterator>::pointer				pointer;
 
 	public:
+
+	/********************************/
+	/*			CONSTRUCTOR			*/
+	/********************************/
+
 		Reverse_iterator(): _current(){};
+		explicit Reverse_iterator(iterator_type it): _current(it){};
+		reverse_iterator (const reverse_iterator& other) :	_current(other._current){};
+		template <class Iter>
+  		reverse_iterator (const reverse_iterator<Iter>& rev_it): _current(rev_it.base()){};
 		~Reverse_iterator();
+
+	/********************************/
+	/*			ACCESSORS			*/
+	/********************************/
+
+		iterator_type	base() const
+		{
+			return (this->_curr);
+		}
+	/********************************/
+	/*			OPERATORS			*/
+	/********************************/
+	
 	};
 };
 

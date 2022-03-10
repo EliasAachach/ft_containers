@@ -16,6 +16,8 @@
 		"iterator": "cpp",
 		"memory": "cpp",
 		"unordered_map": "cpp",
-		"ranges": "cpp"
+		"ranges": "cpp",
+		"memory_resource": "cpp",
+		"sstream": "cpp"
 	}
 }
