@@ -145,7 +145,31 @@ namespace	ft
 		{
 			return (lhs.base() == rhs.base());
 		}
-
+		template<typename T_L, typename T_R>
+		inline bool		operator!=(const ft::Reverse_iterator<T_L> lhs, const ft::Reverse_iterator<T_R> rhs)
+		{
+			return (lhs.base() != rhs.base());
+		}
+		template<typename T_L, typename T_R>
+		inline bool		operator>=(const ft::Reverse_iterator<T_L> lhs, const ft::Reverse_iterator<T_R> rhs)
+		{
+			return (lhs.base() >= rhs.base());
+		}
+		template<typename T_L, typename T_R>
+		inline bool		operator<=(const ft::Reverse_iterator<T_L> lhs, const ft::Reverse_iterator<T_R> rhs)
+		{
+			return (lhs.base() <= rhs.base());
+		}
+		template<typename T_L, typename T_R>
+		inline bool		operator>(const ft::Reverse_iterator<T_L> lhs, const ft::Reverse_iterator<T_R> rhs)
+		{
+			return (lhs.base() > rhs.base());
+		}
+		template<typename T_L, typename T_R>
+		inline bool		operator<(const ft::Reverse_iterator<T_L> lhs, const ft::Reverse_iterator<T_R> rhs)
+		{
+			return (lhs.base() < rhs.base());
+		}
 
 };
 
