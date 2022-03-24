@@ -18,6 +18,7 @@
 		"unordered_map": "cpp",
 		"ranges": "cpp",
 		"memory_resource": "cpp",
-		"sstream": "cpp"
+		"sstream": "cpp",
+		"initializer_list": "cpp"
 	}
 }
