@@ -190,8 +190,16 @@ template < typename T, class Alloc = std::allocator<T> >
 				pointer	new_start = NULL;
 				new_start = this->_alloc.allocate(n);
 				pointer	new_end = new_start;
-				//boucle for pour copier old dans new
-				//deallocate
+				for (size_type i = 0; i < this->size(); i++;)
+				{
+					this->_alloc.construct(new_start + i, this->_start[i]);
+					this->_alloc.destroy(this->_start[i]);
+					new_end++;
+				}
+				this->_alloc.deallocate(this->_start, this->capacity());
+				this->_start = new_start;
+				this->_end = new_end;
+				this->_end_capacity = this->_start + n;
 			}
 		}
 	};
