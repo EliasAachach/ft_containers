@@ -113,55 +113,59 @@ template < typename T, class Alloc = std::allocator<T> >
 				return (*this);
 			}
 
-	/********************************/
-	/*			ITERATORS			*/
-	/********************************/
+		/********************************/
+		/*			ITERATORS			*/
+		/********************************/
 
-	iterator	begin()
-	{
-		return (this->_start);
-	}
-	const_iterator	begin() const
-	{
-		return (this->_start);
-	}
-	iterator	end()
-	{
-		return (this->_end);
-	}
-	const_iterator	end() const
-	{
-		return (this->_end);
-	}
-	reverse	rbegin()
-	{
-		return (reverse_iterator(this->_end));
-	}
-	const_reverse	rbegin() const
-	{
-		return (reverse_iterator(this->_end));
-	}
-	reverse	rend()
-	{
-		return (reverse_iterator(this->_start));
-	}
-	const_reverse	rend() const
-	{
-		return (reverse_iterator(this->_start));
-	}
+		iterator	begin()
+		{
+			return (this->_start);
+		}
+		const_iterator	begin() const
+		{
+			return (this->_start);
+		}
+		iterator	end()
+		{
+			return (this->_end);
+		}
+		const_iterator	end() const
+		{
+			return (this->_end);
+		}
+		reverse	rbegin()
+		{
+			return (reverse_iterator(this->_end));
+		}
+		const_reverse	rbegin() const
+		{
+			return (reverse_iterator(this->_end));
+		}
+		reverse	rend()
+		{
+			return (reverse_iterator(this->_start));
+		}
+		const_reverse	rend() const
+		{
+			return (reverse_iterator(this->_start));
+		}
 
-	/********************************/
-	/*			METHODS				*/
-	/********************************/
-	
-	/********************************/
-	/*			CAPACITY			*/
-	/********************************/
+		/********************************/
+		/*			MODIFIERS			*/
+		/********************************/
+		
+		/********************************/
+		/*			CAPACITY			*/
+		/********************************/
 
-	size_type	size()
-	{
-		return (this->_end - this->_start);
-	}
+		size_type	size()
+		{
+			return (this->_end - this->_start);
+		}
+		size_type	capacity()	const
+		{
+			return (size_type(this->_end_capacity - this->begin()));
+		}
 
 	};
 };
