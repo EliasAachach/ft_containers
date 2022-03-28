@@ -154,6 +154,19 @@ template < typename T, class Alloc = std::allocator<T> >
 		/*			MODIFIERS			*/
 		/********************************/
 		
+		/*single element*/
+		iterator insert (iterator position, const value_type& val)
+		{
+		}
+		/*fill*/
+		void insert (iterator position, size_type n, const value_type& val)
+		{
+		}
+		/*range*/
+		template <class InputIterator>
+		void insert (iterator position, InputIterator first, InputIterator last)
+		{
+		}
 		/********************************/
 		/*			CAPACITY			*/
 		/********************************/
@@ -166,7 +179,21 @@ template < typename T, class Alloc = std::allocator<T> >
 		{
 			return (size_type(this->_end_capacity - this->begin()));
 		}
-
+		void	reserve (size_type n)
+		{
+			if (n > this->max_size())
+			{
+				throw (std::length_error("vector::reserve"));
+			}
+			if (n > this->capacity())
+			{
+				pointer	new_start = NULL;
+				new_start = this->_alloc.allocate(n);
+				pointer	new_end = new_start;
+				//boucle for pour copier old dans new
+				//deallocate
+			}
+		}
 	};
 };
 
