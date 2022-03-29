@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <string>
+# include <string>
 # include "Utils.hpp"
 
 namespace ft
@@ -10,8 +11,6 @@ namespace ft
 	template <typename T>
 	class Random_access_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
 	{
-		private:
-			pointer	_elem;
 
 		public:
 
@@ -20,6 +19,11 @@ namespace ft
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::value_type			value_type;
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type;
 			typedef typename	ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
+		
+		private:
+			pointer	_elem;
+
+		public:
 
 			/*	default constructor	*/
 			Random_access_iterator(): _elem(0)
@@ -37,7 +41,7 @@ namespace ft
 			}
 
 			/*	destructor	*/
-			~Random_access_iterator():
+			~Random_access_iterator()
 			{
 			}
 

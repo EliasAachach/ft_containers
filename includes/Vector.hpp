@@ -4,7 +4,10 @@
 # include <memory>
 # include <stdexcept>
 # include "Random_access_iterator.hpp"
+# include "Reverse_iterator.hpp"
 # include "Utils.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 
 namespace ft
 {
@@ -18,20 +21,16 @@ template < typename T, class Alloc = std::allocator<T> >
 	/********************************/
 			typedef				T		value_type;
 			typedef				Alloc	allocator_type;
-			typedef typename	allocator_type::reference		reference
-			typedef typename	allocator_type::const_reference	const_reference
-			typedef typename	allocator_type::pointer		pointer
-			typedef typename	allocator_type::const_pointer	const_pointer
-			typedef typename 	Alloc::reference		reference;
-			typedef typename 	Alloc::const_reference	const_reference;
-			typedef typename 	Alloc::pointer			pointer;
-			typedef typename 	Alloc::const_pointer	const_pointer;
+			typedef typename	allocator_type::reference		reference;
+			typedef typename	allocator_type::const_reference	const_reference;
+			typedef typename	allocator_type::pointer		pointer;
+			typedef typename	allocator_type::const_pointer	const_pointer;
 			typedef				ft::Random_access_iterator<value_type>	iterator;
 			typedef				ft::Random_access_iterator<const value_type>	const_iterator;
 			typedef				ft::Reverse_iterator<iterator>	reverse;
 			typedef				ft::Reverse_iterator<const_iterator>	const_reverse;
 			typedef typename	allocator_type::size_type						size_type;
-			typedef typename	ft::iterator_traits<iterator>::difference_type	difference_type;
+			typedef typename	ft::Iterator_traits<iterator>::difference_type	difference_type;
 
 		private:
 
@@ -97,7 +96,7 @@ template < typename T, class Alloc = std::allocator<T> >
 				this->_end = this->_start;
 				this->assign(x.begin(), x.end());
 			}
-			~Vector();
+			~Vector()
 			{
 				this->clear();
 				this->_alloc.deallocate(this->_start, this->capacity());
@@ -157,6 +156,21 @@ template < typename T, class Alloc = std::allocator<T> >
 		/*single element*/
 		iterator insert (iterator position, const value_type& val)
 		{
+			size_type	index = ft::distance(this->begin(), position);
+			this->reserve(computeCapacity(1));
+			iterator	new_pos = this->begin() + index;
+			iterator	it = this->end();
+			size_type	size = this->size();
+			while (it != new_pos)
+			{
+				_alloc.construct(this->_start + size, this->_start[size - 1]);
+				_alloc.destroy(this->_start + size - 1);
+				size--;
+				it--;
+			}
+			_alloc.construct(this->_start + size, val);
+			this->_end++;
+			return (iterator(this->_start + index));
 		}
 		/*fill*/
 		void insert (iterator position, size_type n, const value_type& val)
@@ -179,6 +193,10 @@ template < typename T, class Alloc = std::allocator<T> >
 		{
 			return (size_type(this->_end_capacity - this->begin()));
 		}
+		size_type	max_size()const
+		{
+			return (allocator_type().max_size());
+		}
 		void	reserve (size_type n)
 		{
 			if (n > this->max_size())
@@ -190,7 +208,7 @@ template < typename T, class Alloc = std::allocator<T> >
 				pointer	new_start = NULL;
 				new_start = this->_alloc.allocate(n);
 				pointer	new_end = new_start;
-				for (size_type i = 0; i < this->size(); i++;)
+				for (size_type i = 0; i < this->size(); i++)
 				{
 					this->_alloc.construct(new_start + i, this->_start[i]);
 					this->_alloc.destroy(this->_start[i]);

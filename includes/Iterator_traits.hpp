@@ -10,11 +10,11 @@ namespace	ft
 	{
 	public:
 
-		typedef Iteraor::value_type			value_type;
-		typedef Iteraor::distance			difference_type;
-		typedef Iteraor::pointer				pointer;
-		typedef Iteraor::reference			reference;
-		typedef Iteraor::iterator_category	iterator_category;
+		typedef typename	Iterator::value_type			value_type;
+		typedef typename	Iterator::distance			difference_type;
+		typedef typename	Iterator::pointer				pointer;
+		typedef typename	Iterator::reference			reference;
+		typedef typename	Iterator::iterator_category	iterator_category;
 
 	};
 
@@ -48,7 +48,7 @@ namespace	ft
 	typename ft::Iterator_traits<Iterator>::difference_type
 	distance (Iterator first, Iterator last)
 	{
-		return (distance(first, last, typename ft::iterator_traits<Iterator>::iterator_category()));
+		return (distance(first, last, typename ft::Iterator_traits<Iterator>::iterator_category()));
 	}
 
 	template  <typename RandomAccessIterator>
@@ -61,8 +61,8 @@ namespace	ft
 	typename ft::Iterator_traits<InputIterator>::difference_type
 	distance(InputIterator	first, InputIterator last, ft::input_iterator_tag)
 	{
-		typename ft::iterator_traits<InputIterator>::difference_type	diff;
-		for(diff = 0; first != last; ++first; ++diff;){}
+		typename ft::Iterator_traits<InputIterator>::difference_type	diff;
+		for(diff = 0; first != last; ++first, ++diff){}
 		return (diff);
 	}
 	
