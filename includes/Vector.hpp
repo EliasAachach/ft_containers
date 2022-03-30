@@ -235,14 +235,17 @@ template < typename T, class Alloc = std::allocator<T> >
 		{
 			return (this->_end - this->_start);
 		}
+		
 		size_type	capacity()	const
 		{
 			return (size_type(this->_end_capacity - this->begin()));
 		}
+		
 		size_type	max_size()const
 		{
 			return (allocator_type().max_size());
 		}
+
 		void	reserve (size_type n)
 		{
 			if (n > this->max_size())
@@ -266,6 +269,7 @@ template < typename T, class Alloc = std::allocator<T> >
 				this->_end_capacity = this->_start + n;
 			}
 		}
+
 		void	resize(size_type n, value_type val = value_type())
 		{
 			if (n > max_size())
@@ -284,6 +288,7 @@ template < typename T, class Alloc = std::allocator<T> >
 				this->insert(this->end(), (n - this->size()), val);
 			}
 		}
+
 		bool	empty() const
 		{
 			return (this->start == this->end);
@@ -293,15 +298,41 @@ template < typename T, class Alloc = std::allocator<T> >
 		/*			ELEMENT	ACCESS		*/
 		/********************************/
 
-		reference operator[] (size_type n)
+		reference	operator[] (size_type n)
 		{
 			return (static_cast<reference>(*(this->_start + n)));
 		}
-		const_reference operator[] (size_type n)
+		const_reference	operator[] (size_type n) const
 		{
 			return (static_cast<const_reference>(*(this->_start + n)));
 		}
-
+		
+		reference	at(size_type n)
+		{
+			if (n >= this->size())
+			{
+				std::string error("vector::at: n (wich is ");
+				error += ft::to_string(n);
+				error += std::string(") >= this->size() (wich is ");
+				error += ft::to_string(this->size());
+				error += std::string(")");
+				throw(std::out_of_range(error));
+			}
+			return (this->operator[](n));
+		}
+		const_reference	at(size_type n) const
+		{
+			if (n >= this->size())
+			{
+				std::string error("vector::at: n (wich is ");
+				error += ft::to_string(n);
+				error += std::string(") >= this->size() (wich is ");
+				error += ft::to_string(this->size());
+				error += std::string(")");
+				throw(std::out_of_range(error));
+			}
+			return (this->operator[](n));
+		}
 	};
 };
 
