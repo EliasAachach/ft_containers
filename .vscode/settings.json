@@ -19,6 +19,7 @@
 		"ranges": "cpp",
 		"memory_resource": "cpp",
 		"sstream": "cpp",
-		"initializer_list": "cpp"
+		"initializer_list": "cpp",
+		"stdexcept": "cpp"
 	}
 }

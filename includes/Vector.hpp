@@ -8,6 +8,7 @@
 # include "Utils.hpp"
 # include "enable_if.hpp"
 # include "is_integral.hpp"
+# include "operator_utils.hpp"
 
 namespace ft
 {
@@ -154,7 +155,7 @@ template < typename T, class Alloc = std::allocator<T> >
 		/********************************/
 		
 		/*single element*/
-		iterator insert (iterator position, const value_type& val)
+		iterator	insert(iterator position, const value_type& val)
 		{
 			size_type	index = ft::distance(this->begin(), position);
 			this->reserve(computeCapacity(1));
@@ -173,13 +174,57 @@ template < typename T, class Alloc = std::allocator<T> >
 			return (iterator(this->_start + index));
 		}
 		/*fill*/
-		void insert (iterator position, size_type n, const value_type& val)
+		void	insert(iterator position, size_type n, const value_type &val)
 		{
+			if (n == 0)
+				return;
+			size_type new_size = this->size() + n;
+			size_type insert_idx = ft::distance(this->begin(), position);
+			ptrdiff_t i = this->size() - 1;
+			size_type j;
+			this->reserve(computeCapacity(n));
+			while (i >= static_cast<ptrdiff_t>(insert_idx))
+			{
+				this->_alloc.construct(this->_start + n + i, this->_start[i]);
+				this->_alloc.destroy(this->_start + i);
+				i--;
+			}
+			j = 0;
+			while (j < n)
+			{
+				this->_alloc.construct(this->_start + insert_idx + j, val);
+				j++;
+			}
+			this->_end = this->_start + new_size;
 		}
 		/*range*/
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last)
+		void	insert(iterator position, InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0)
 		{
+			size_type dist = ft::distance(first, last);
+			if (dist == 0)
+				return;
+			size_type new_size = this->size() + dist;
+			size_type insert_idx = ft::distance(this->begin(), position);
+			ptrdiff_t i = this->size() - 1;
+			InputIterator tmp;
+			this->reserve(computeCapacity(dist));
+			while (i >= static_cast<ptrdiff_t>(insert_idx))
+			{
+				this->_alloc.construct(this->_start + dist + i, this->_start[i]);
+				this->_alloc.destroy(this->_start + i);
+				i--;
+			}
+			tmp = first;
+			i = 0;
+			while (tmp != last)
+			{
+				this->_alloc.construct(this->_start + insert_idx + i, *tmp);
+				tmp++;
+				i++;
+			}
+			this->_end = this->_start + new_size;
 		}
 		/********************************/
 		/*			CAPACITY			*/
