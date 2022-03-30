@@ -265,6 +265,28 @@ template < typename T, class Alloc = std::allocator<T> >
 				this->_end_capacity = this->_start + n;
 			}
 		}
+		void	resize(size_type n, value_type val = value_type())
+		{
+			if (n > max_size())
+				throw std::length_error("vector::resize");
+			else if (n < this->size())
+			{
+				while (this->size() > n)
+				{
+					--_end;
+					_alloc.destroy(_end);
+				}
+			}
+			else
+			{
+				this->reserve(n);
+				this->insert(this->end(), (n - this->size()), val);
+			}
+		}
+		bool	empty() const
+		{
+			return (this->start == this->end);
+		}
 	};
 };
 
