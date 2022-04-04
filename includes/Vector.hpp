@@ -298,7 +298,7 @@ template < typename T, class Alloc = std::allocator<T> >
 		/*			ELEMENT	ACCESS		*/
 		/********************************/
 
-		reference	operator[] (size_type n)
+		reference		operator[] (size_type n)
 		{
 			return (static_cast<reference>(*(this->_start + n)));
 		}
@@ -307,7 +307,7 @@ template < typename T, class Alloc = std::allocator<T> >
 			return (static_cast<const_reference>(*(this->_start + n)));
 		}
 		
-		reference	at(size_type n)
+		reference		at(size_type n)
 		{
 			if (n >= this->size())
 			{
@@ -332,6 +332,24 @@ template < typename T, class Alloc = std::allocator<T> >
 				throw(std::out_of_range(error));
 			}
 			return (this->operator[](n));
+		}
+		reference		front()
+		{
+			return (*(this->_start));
+		}
+
+		const_reference	front() const
+		{
+			return (*(this->_start));
+		}
+		reference		back(void)
+		{
+			return (*(this->_end - 1));
+		}
+
+		const_reference	back(void) const
+		{
+			return (*(this->_end - 1));
 		}
 	};
 };
