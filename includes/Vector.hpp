@@ -433,7 +433,17 @@ template < typename T, class Alloc = std::allocator<T> >
 		{
 			return (*(this->_end - 1));
 		}
+
+		/********************************/
+		/*			ALLOCATOR			*/
+		/********************************/
+
+		allocator_type	get_allocator(void) const
+		{
+			return (this->_alloc);
+		}
 	};
+	
 };
 
 #endif /* ********************************************************** VECTOR_H */
