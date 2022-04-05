@@ -1,11 +1,21 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
-# include <iostream>
+# include <cstddef>
 # include <string>
-
+# include <sstream>
+# include <typeinfo>
+# include <iostream>
 namespace ft
 {
+	template <typename T>
+	std::string	to_string(T n)
+	{
+		std::ostringstream ss;
+		ss << n;
+		return (ss.str());
+	}
+
 	struct	random_access_iterator_tag {};
 	struct	input_iterator_tag {};
 	struct	output_iterator_tag {};

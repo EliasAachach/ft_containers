@@ -298,7 +298,7 @@ template < typename T, class Alloc = std::allocator<T> >
 			return (first);
 		}
 
-		void	swap(vector &x)
+		void	swap(Vector &x)
 		{
 			std::swap(this->_start, x._start);
 			std::swap(this->_end, x._end);
@@ -443,7 +443,7 @@ template < typename T, class Alloc = std::allocator<T> >
 			return (this->_alloc);
 		}
 	};
-	
+
 };
 
 #endif /* ********************************************************** VECTOR_H */
