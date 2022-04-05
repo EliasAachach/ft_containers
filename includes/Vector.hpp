@@ -304,6 +304,11 @@ template < typename T, class Alloc = std::allocator<T> >
 			std::swap(this->_end, x._end);
 			std::swap(this->_end_capacity, x._end_capacity);
 		}
+
+		void clear(void)
+		{
+			this->erase(this->begin(), this->end());
+		}
 		/********************************/
 		/*			CAPACITY			*/
 		/********************************/
