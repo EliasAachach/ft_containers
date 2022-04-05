@@ -227,6 +227,83 @@ template < typename T, class Alloc = std::allocator<T> >
 			this->_end = this->_start + new_size;
 		}
 
+		/*range*/
+		template <class InputIterator>
+		void	assign(InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0)
+		{
+			size_type dist = ft::distance(first, last);
+			this->clear();
+			if (this->capacity() >= dist)
+			{
+				for (; first != last; first++, this->_end++)
+				{
+					this->_alloc.construct(this->_end, *first);
+				}
+			}
+			else
+			{
+				this->reserve(dist);
+				this->assign(first, last);
+			}
+		}
+		/*fill*/
+		void	assign(size_type n, const value_type &val)
+		{
+			this->clear();
+			if (n == 0)
+				return;
+			this->reserve(n);
+			while (n--)
+			{
+				this->_alloc.construct(this->_end, val);
+				this->_end++;
+			}
+		}
+
+		void	push_back(const value_type &val)
+		{
+			if (this->_end == this->_end_capacity)
+			{
+				this->reserve(computeCapacity(1));
+			}
+			this->_alloc.construct(this->_end, val);
+			this->_end++;
+		}
+		void	pop_back(void)
+		{
+			--this->_end;
+			this->_alloc.destroy((this->_end));
+		}
+
+		iterator	erase(iterator position)
+		{
+			return (erase(position, position + 1));
+		}
+		iterator	erase(iterator first, iterator last)
+		{
+			if (first != this->end() && first != last)
+			{
+				pointer p_first = &(*first);
+				for (; &(*first) != &(*last); first++)
+					_alloc.destroy(&(*first));
+				for (int i = 0; i < _end - &(*last); i++)
+				{
+					_alloc.construct(p_first + i, *(&(*last) + i));
+					_alloc.destroy(&(*last) + i);
+				}
+				_end -= (&(*last) - p_first);
+				return (iterator(p_first));
+			}
+			return (first);
+		}
+
+		void	swap(vector &x)
+		{
+			std::swap(this->_start, x._start);
+			std::swap(this->_end, x._end);
+			std::swap(this->_end_capacity, x._end_capacity);
+		}
 		/********************************/
 		/*			CAPACITY			*/
 		/********************************/
