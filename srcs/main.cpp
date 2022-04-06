@@ -415,7 +415,7 @@ void	V_testReverseIterator(void)
 
 }
 
-void	testVector(void)
+int	main(void)
 {
 	/* ------------------------------------------------------------- */
 	/* -------------------------- VECTOR ---------------------------- */	
@@ -437,9 +437,6 @@ void	testVector(void)
 	std::cout << std::endl;
 
 	V_testInsert();
-	std::cout << std::endl;
-
-	testErase();
 	std::cout << std::endl;
 
 	V_testSwap();

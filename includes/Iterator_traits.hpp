@@ -6,7 +6,7 @@
 namespace	ft
 {
 	template <class Iterator>
-	class Iterator_traits
+	class iterator_traits
 	{
 	public:
 
@@ -19,7 +19,7 @@ namespace	ft
 	};
 
 	template <class T>
-	class Iterator_traits<T*>
+	class iterator_traits<T*>
 	{
 	public:
 
@@ -32,7 +32,7 @@ namespace	ft
 	};
 
 	template <class T>
-	class Iterator_traits<const T>
+	class iterator_traits<const T>
 	{
 	public:
 
@@ -45,23 +45,23 @@ namespace	ft
 	};
 
 	template <typename Iterator>
-	typename ft::Iterator_traits<Iterator>::difference_type
+	typename ft::iterator_traits<Iterator>::difference_type
 	distance (Iterator first, Iterator last)
 	{
-		return (distance(first, last, typename ft::Iterator_traits<Iterator>::iterator_category()));
+		return (distance(first, last, typename ft::iterator_traits<Iterator>::iterator_category()));
 	}
 
 	template  <typename RandomAccessIterator>
-	typename	ft::Iterator_traits<RandomAccessIterator>::difference_type
+	typename	ft::iterator_traits<RandomAccessIterator>::difference_type
 	distance(RandomAccessIterator first, RandomAccessIterator last, ft::random_access_iterator_tag)
 	{
-		return (first - last);
+		return (last - first);
 	}
 	template <typename InputIterator>
-	typename ft::Iterator_traits<InputIterator>::difference_type
+	typename ft::iterator_traits<InputIterator>::difference_type
 	distance(InputIterator	first, InputIterator last, ft::input_iterator_tag)
 	{
-		typename ft::Iterator_traits<InputIterator>::difference_type	diff;
+		typename ft::iterator_traits<InputIterator>::difference_type	diff;
 		for(diff = 0; first != last; ++first, ++diff){}
 		return (diff);
 	}

@@ -40,11 +40,6 @@ namespace ft
 			{
 			}
 
-			/*	destructor	*/
-			~random_access_iterator()
-			{
-			}
-
 	/********************************/
 	/*			ACCESSORS			*/
 	/********************************/
@@ -77,10 +72,6 @@ namespace ft
 			{
 				return (this->_elem - nbr);
 			}
-			random_access_iterator			operator-(random_access_iterator const & rhs)
-			{
-				return (this->_elem - rhs.base());
-			}
 			random_access_iterator &		operator+=(difference_type nbr)
 			{
 				_elem += nbr;
@@ -112,23 +103,23 @@ namespace ft
 	/********************************/
 	/*	Incrementation Operators	*/
 	/********************************/
-			random_access_iterator &		operator++()
+			random_access_iterator &	operator++()
 			{
 				_elem++;
-				return (this);
+				return (*this);
 			}
-			random_access_iterator &		operator++(int)
+			random_access_iterator		operator++(int)
 			{
 				random_access_iterator	ret(*this);
 				_elem++;
 				return (ret);
 			}
-			random_access_iterator &		operator--()
+			random_access_iterator &	operator--()
 			{
 				_elem--;
-				return (this);
+				return (*this);
 			}
-			random_access_iterator &		operator--(int)
+			random_access_iterator		operator--(int)
 			{
 				random_access_iterator	ret(*this);
 				_elem--;
@@ -138,8 +129,10 @@ namespace ft
 			{
 				return (*(operator+(n)));
 			}
-
-
+			operator random_access_iterator<const T>() const
+			{
+				return (random_access_iterator<const T>(this->_elem));
+			}
 	};
 
 	/********************************/
@@ -149,67 +142,67 @@ namespace ft
 	template <typename T>
 	bool		operator<(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() < rhs->base());
+		return (lhs.base() < rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator<(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() < rhs->base());
+		return (lhs.base() < rhs.base());
 	}
 
 	template <typename T>
 	bool		operator>(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() > rhs->base());
+		return (lhs.base() > rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator>(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() > rhs->base());
+		return (lhs.base() > rhs.base());
 	}
 
 	template <typename T>
 	bool		operator<=(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() <= rhs->base());
+		return (lhs.base() <= rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator<=(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() <= rhs->base());
+		return (lhs.base() <= rhs.base());
 	}
 
 	template <typename T>
 	bool		operator>=(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() >= rhs->base());
+		return (lhs.base() >= rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator>=(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() >= rhs->base());
+		return (lhs.base() >= rhs.base());
 	}
 
 	template <typename T>
 	bool		operator==(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() == rhs->base());
+		return (lhs.base() == rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator==(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() == rhs->base());
+		return (lhs.base() == rhs.base());
 	}
 
 	template <typename T>
 	bool		operator!=(ft::random_access_iterator<T> const lhs, ft::random_access_iterator<T> const rhs)
 	{
-		return (lhs->base() != rhs->base());
+		return (lhs.base() != rhs.base());
 	}
 	template <typename T_L, typename T_R>
 	bool		operator!=(ft::random_access_iterator<T_L> const lhs, ft::random_access_iterator<T_R> const rhs)
 	{
-		return (lhs->base() != rhs->base());
+		return (lhs.base() != rhs.base());
 	}
 
 	template<typename T>

@@ -7,17 +7,17 @@
 namespace	ft
 {
 	template <class _Iterator>
-	class reverse_iterator : public ft::iterator<typename ft::Iterator_traits<_Iterator>::iterator_category, 
-				typename ft::Iterator_traits<_Iterator>::value_type>
+	class reverse_iterator : public ft::iterator<typename ft::iterator_traits<_Iterator>::iterator_category, 
+				typename ft::iterator_traits<_Iterator>::value_type>
 	{
 
 	public:
 
 		typedef _Iterator												iterator_type;
-		typedef typename Iterator_traits<_Iterator>::difference_type		difference_type;
-		typedef typename Iterator_traits<_Iterator>::iterator_category	iterator_category;
-		typedef typename Iterator_traits<_Iterator>::reference			reference;
-		typedef typename Iterator_traits<_Iterator>::pointer				pointer;
+		typedef typename iterator_traits<_Iterator>::difference_type		difference_type;
+		typedef typename iterator_traits<_Iterator>::iterator_category	iterator_category;
+		typedef typename iterator_traits<_Iterator>::reference			reference;
+		typedef typename iterator_traits<_Iterator>::pointer				pointer;
 	
 	protected:
 
@@ -34,7 +34,6 @@ namespace	ft
 		reverse_iterator (const reverse_iterator& other) :	_current(other._current){};
 		template <class Iter>
   		reverse_iterator (const reverse_iterator<Iter>& rev_it): _current(rev_it.base()){};
-		~reverse_iterator();
 
 	/********************************/
 	/*			ACCESSORS			*/
@@ -42,7 +41,7 @@ namespace	ft
 
 		iterator_type	base() const
 		{
-			return (this->_curr);
+			return (this->_current);
 		}
 	/********************************/
 	/*			OPERATORS			*/
@@ -51,7 +50,7 @@ namespace	ft
 		/*	Dereference Operators	*/
 		reference	operator*(void) const
 		{
-			reverse_iterator	tmp = this->_current;
+			iterator_type	tmp = this->_current;
 			return(*--tmp);
 		}
 
@@ -111,7 +110,10 @@ namespace	ft
 		{
 			return *(*this + n);
 		}
-
+		operator reverse_iterator<const _Iterator>() const
+		{
+			return (reverse_iterator<const _Iterator>(this->_current));
+		}
 	};
 	/********************************/
 	/*			OPERATORS			*/

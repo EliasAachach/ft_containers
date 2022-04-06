@@ -31,7 +31,7 @@ template < typename T, class Alloc = std::allocator<T> >
 			typedef				ft::reverse_iterator<iterator>	reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef typename	allocator_type::size_type						size_type;
-			typedef typename	ft::Iterator_traits<iterator>::difference_type	difference_type;
+			typedef typename	ft::iterator_traits<iterator>::difference_type	difference_type;
 
 		private:
 
@@ -65,28 +65,29 @@ template < typename T, class Alloc = std::allocator<T> >
 			{
 				this->_start = this->_alloc.allocate(n);
 				this->_end_capacity = this->_start + n;
-				this->end = this->_start;
+				this->_end = this->_start;
 				while(n--)
 				{
 					this->_alloc.construct(this->_end, val);
-					this->end++;
+					this->_end++;
 				}
 			}
 
 				/*	Range	*/
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) :
-					_alloc(alloc)
-			{
-				difference_type	n = ft::distance(first, last);
+         	vector (InputIterator first, InputIterator last, 
+				const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) 
+				: _alloc(alloc) {
+				difference_type n = last - first;
 				this->_start = this->_alloc.allocate(n);
 				this->_end_capacity = this->_start + n;
-				this->end = this->_start;
-				while(n--)
-				{
-					this->push_back(*first++);
-				}
+				this->_end = this->_start;
+				while (n--) {
+						this->_alloc.construct(this->_end, *first);
+						this->_end++;
+						first++;
+					}
 			}
 				/*	Copy	*/
 			vector	(const vector& x):
@@ -313,41 +314,38 @@ template < typename T, class Alloc = std::allocator<T> >
 		/*			CAPACITY			*/
 		/********************************/
 
-		size_type	size()
+		size_type	size() const
 		{
 			return (this->_end - this->_start);
 		}
 		
-		size_type	capacity()	const
+		size_type	capacity ( void ) const
 		{
-			return (size_type(this->_end_capacity - this->begin()));
+			return (size_type(const_iterator(this->_end_capacity) - this->begin()));
 		}
+
 		
 		size_type	max_size()const
 		{
 			return (allocator_type().max_size());
 		}
 
-		void	reserve (size_type n)
+		void	reserve(size_type n)
 		{
 			if (n > this->max_size())
+				throw std::length_error("vector::reserve");
+			if (this->capacity() < n)
 			{
-				throw (std::length_error("vector::reserve"));
-			}
-			if (n > this->capacity())
-			{
-				pointer	new_start = NULL;
-				new_start = this->_alloc.allocate(n);
-				pointer	new_end = new_start;
+				const size_type old_size = this->size();
+				pointer tmp = this->_alloc.allocate(n, this->_start);
 				for (size_type i = 0; i < this->size(); i++)
 				{
-					this->_alloc.construct(new_start + i, this->_start[i]);
-					this->_alloc.destroy(this->_start[i]);
-					new_end++;
+					this->_alloc.construct(tmp + i, this->_start[i]);
+					this->_alloc.destroy(&(this->_start[i]));
 				}
 				this->_alloc.deallocate(this->_start, this->capacity());
-				this->_start = new_start;
-				this->_end = new_end;
+				this->_start = tmp;
+				this->_end = tmp + old_size;
 				this->_end_capacity = this->_start + n;
 			}
 		}
@@ -360,8 +358,8 @@ template < typename T, class Alloc = std::allocator<T> >
 			{
 				while (this->size() > n)
 				{
-					--_end;
-					_alloc.destroy(_end);
+					--this->_end;
+					this->_alloc.destroy(this->_end);
 				}
 			}
 			else
@@ -460,20 +458,9 @@ template < typename T, class Alloc = std::allocator<T> >
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		if (lhs.size() == rhs.size())
-		{
-			typename ft::vector<T>::const_iterator first_l(lhs.begin());
-			typename ft::vector<T>::const_iterator first_r(rhs.begin());
-			while (first_l != lhs.end())
-			{
-				if (first_r == rhs.end() || *first_l != *first_r)
-					return (false);
-				first_l++;
-				first_r++;
-			}
-			return (true);
-		}
-		return (false);
+		if (lhs.size() != rhs.size())
+			return false;
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
 	template <class T, class Alloc>
