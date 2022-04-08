@@ -286,7 +286,7 @@ void	V_testInsert(void)
 	printContent(my_vector, std_vector);
 	printInfosVector(my_vector, std_vector);
 
-	std::cout << BLUE3 << std::endl << "/* function insert with a range of values */" << END;
+	std::cout << BLUE3 << std::endl << "/* function insert with a range of values */" << std::endl << END;
 
 	ft::vector<int>	my_input_iterator(5, 104);
 	std::vector<int>	std_input_iterator(5, 104);
