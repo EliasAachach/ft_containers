@@ -371,7 +371,7 @@ template < typename T, class Alloc = std::allocator<T> >
 
 		bool	empty() const
 		{
-			return (this->start == this->end);
+			return (this->_start == this->_end);
 		}
 
 		/********************************/

@@ -124,7 +124,7 @@ namespace	ft
 		inline typename ft::reverse_iterator<T_L>::difference_type
 		operator-(	const ft::reverse_iterator<T_L> lhs, const ft::reverse_iterator<T_R> rhs)
 		{
-			return ( lhs.base() - rhs.base() );
+			return ( rhs.base() - lhs.base() );
 		}
 		template<typename _Iterator>
 		inline reverse_iterator<_Iterator>
