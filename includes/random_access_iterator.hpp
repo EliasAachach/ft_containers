@@ -60,7 +60,7 @@ namespace ft
                 this->_elem = rhs._elem;
                 return (*this);
 			}
-			random_access_iterator			operator+(difference_type nbr)
+			random_access_iterator			operator+(difference_type nbr) const
 			{
 				return (this->_elem + nbr);
 			}
@@ -68,7 +68,7 @@ namespace ft
 			{
 				return (this->_elem + rhs.base());
 			}
-			random_access_iterator			operator-(difference_type nbr)
+			random_access_iterator			operator-(difference_type nbr) const
 			{
 				return (this->_elem - nbr);
 			}

@@ -185,37 +185,37 @@ void	V_testAssign(void)
 	printInfosVector(my_vector, std_vector);
 }
 
-void	V_testResize(void)
+void    testResize(void)
 {
-	std::cout << BLUE1 << "/*________________________RESIZE________________________*/"<< END << std::endl;
-	ft::vector<int>		my_vector(10, 15);
-	std::vector<int>	std_vector(10, 15);
+    std::cout << BLUE1 << "/*________________________RESIZE________________________*/"<< END << std::endl;
+    ft::vector<int>        my_vector(10, 15);
+    std::vector<int>    std_vector(10, 15);
 
-	std::cout << BLUE2 << "BEFORE RESIZE" << END << std::endl;
-	printContent(my_vector, std_vector);
-	printInfosVector(my_vector, std_vector);
-	std::cout << std::endl;
+    std::cout << BLUE2 << "BEFORE RESIZE" << END << std::endl;
+    printContent(my_vector, std_vector);
+    printInfosVector(my_vector, std_vector);
+    std::cout << std::endl;
 
-	std::cout << BLUE3 << std::endl << "/* resize to less than size */" << END << std::endl;
-	my_vector.resize(5);
-	std_vector.resize(5);
+    std::cout << BLUE3 << std::endl << "/* resize to less than size */" << END << std::endl;
+    my_vector.resize(5);
+    std_vector.resize(5);
 
-	printContent(my_vector, std_vector);
-	printInfosVector(my_vector, std_vector);
+    printContent(my_vector, std_vector);
+    printInfosVector(my_vector, std_vector);
 
-	std::cout << BLUE3 << std::endl << "/* resize to more than size */" << END << std::endl;
-	my_vector.resize(15);
-	std_vector.resize(15);
+    std::cout << BLUE3 << std::endl << "/* resize to more than size */" << END << std::endl;
+    my_vector.resize(15);
+    std_vector.resize(15);
 
-	printContent(my_vector, std_vector);
-	printInfosVector(my_vector, std_vector);
+    printContent(my_vector, std_vector);
+    printInfosVector(my_vector, std_vector);
 
-	std::cout << BLUE3 << std::endl << "/* resize to more than size & val specified*/" << END << std::endl;
-	my_vector.resize(15, 5);
-	std_vector.resize(15, 5);
+    std::cout << BLUE3 << std::endl << "/* resize to more than size & val specified*/" << END << std::endl;
+    my_vector.resize(18, 5);
+    std_vector.resize(18, 5);
 
-	printContent(my_vector, std_vector);
-	printInfosVector(my_vector, std_vector);
+    printContent(my_vector, std_vector);
+    printInfosVector(my_vector, std_vector);
 }
 
 void	V_testPop_Push_Back(void)
@@ -421,35 +421,35 @@ void	V_testReverseIterator(void)
 // 	/* -------------------------- VECTOR ---------------------------- */	
 // 	/* ------------------------------------------------------------- */
 	
-// 	V_testConstructors();
-// 	std::cout << std::endl;
+// 	// V_testConstructors();
+// 	// std::cout << std::endl;
 
-// 	V_testResize();
+// 	testResize();
 // 	std::cout << std::endl;
 	
-// 	V_testReserve();
-// 	std::cout << std::endl;
+	// V_testReserve();
+	// std::cout << std::endl;
 
-// 	V_testElementAccess();
-// 	std::cout << std::endl;
+	// V_testElementAccess();
+	// std::cout << std::endl;
 
-// 	V_testPop_Push_Back();
-// 	std::cout << std::endl;
+	// V_testPop_Push_Back();
+	// std::cout << std::endl;
 
-// 	V_testInsert();
-// 	std::cout << std::endl;
+	// V_testInsert();
+	// std::cout << std::endl;
 
-// 	V_testSwap();
-// 	std::cout << std::endl;
+	// V_testSwap();
+	// std::cout << std::endl;
 
-// 	V_testRelationalOperators();
-// 	std::cout << std::endl;
+	// V_testRelationalOperators();
+	// std::cout << std::endl;
 
-// 	V_testReverseIterator();
-// 	std::cout << std::endl;
+	// V_testReverseIterator();
+	// std::cout << std::endl;
 	
-// 	V_testAssign();
-// 	std::cout << std::endl;
+	// V_testAssign();
+	// std::cout << std::endl;
 
 // }
 #ifndef BASE_HPP
@@ -544,25 +544,32 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 }
 
 #define TESTED_TYPE int
-#include <list>
 
 int		main(void)
 {
-	std::list<TESTED_TYPE> lst;
-	std::list<TESTED_TYPE>::iterator lst_it;
-	for (int i = 1; i < 5; ++i)
-		lst.push_back(i * 3);
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
 
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
-	printSize(vct);
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
 
-	lst_it = lst.begin();
-	for (int i = 1; lst_it != lst.end(); ++i)
-		*lst_it++ = i * 5;
-	vct.assign(lst.begin(), lst.end());
-	printSize(vct);
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
 
-	vct.insert(vct.end(), lst.rbegin(), lst.rend());
-	printSize(vct);
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	printSize(vct, true);
 	return (0);
 }

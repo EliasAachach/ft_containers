@@ -95,12 +95,12 @@ namespace	ft
 			return (reverse_iterator(this->_current + n));
 		}
 
-		reverse_iterator &	operator+=(difference_type n) const
+		reverse_iterator &	operator+=(difference_type n)
 		{
 			this->_current -= n;
 			return (*this);
 		}
-		reverse_iterator &	operator-=(difference_type n) const
+		reverse_iterator &	operator-=(difference_type n)
 		{
 			this->_current += n;
 			return (*this);
