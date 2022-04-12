@@ -79,7 +79,7 @@ template < typename T, class Alloc = std::allocator<T> >
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) 
 				: _alloc(alloc) {
-				difference_type n = last - first;
+				difference_type n = ft::distance(first, last);
 				this->_start = this->_alloc.allocate(n);
 				this->_end_capacity = this->_start + n;
 				this->_end = this->_start;

@@ -98,7 +98,7 @@ namespace ft
 			}
 			pointer				operator->(void) const
 			{
-				return (&(this->_elem));
+				return (this->_elem);
 			}
 	/********************************/
 	/*	Incrementation Operators	*/
