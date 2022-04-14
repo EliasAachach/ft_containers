@@ -37,6 +37,29 @@ namespace ft
 		{
 			return(this->_c.empty());
 		}
+		
+		size_type	size() const
+		{
+			return (this->_c.size());
+		}
+
+		value_type &	top()
+		{
+			return(this->_c.back());
+		}
+		const	value_type &	top()
+		{
+			return(this->_c.back());
+		}
+
+		void	push(const value_type &val)
+		{
+			this->_c.push_back(val);
+		}
+		void	push()
+		{
+			this->_c.pop_back();
+		}
 	};
 }
 
