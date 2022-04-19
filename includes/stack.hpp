@@ -1,11 +1,12 @@
 #ifndef STACK_HPP
 # define STACK_HPP
 
+# include <memory>
 # include "vector.hpp"
 
 namespace ft
 {
-	template < typename T, typename Container = ft::vector<T>>
+	template < typename T, typename Container = ft::vector<T> >
 	class stack
 	{
 		public:
@@ -60,7 +61,56 @@ namespace ft
 		{
 			this->_c.pop_back();
 		}
+
+		/********************************/
+		/*		FRIEND	TEMPLATE		*/
+		/********************************/
+			template<typename T1, typename Container1>
+			friend bool operator==(const stack< T1, Container1>&, const stack< T1, Container1>&);
+
+			template<typename T1, typename Container1>
+			friend bool operator<(const stack< T1, Container1>&, const stack< T1, Container1>&);
 	};
+		template<typename T, typename _Container>
+	inline bool operator== ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return __x.c == __y.c;
+	}
+
+		/********************************/
+		/*		RELATIONAL OPERATORS	*/
+		/********************************/
+	template<typename T, typename _Container>
+	inline bool	operator< ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return __x.c < __y.c;
+
+	}
+
+	template<typename T, typename _Container>
+	inline bool	operator!= ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return !(__x == __y);
+
+	}
+
+	template<typename T, typename _Container>
+	inline bool	operator> ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return __y < __x;
+	}
+
+	template<typename T, typename _Container>
+	inline bool	operator<= ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return !(__y < __x);
+	}
+
+	template<typename T, typename _Container>
+	inline bool	operator>= ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
+	{
+		return !(__x < __y);
+	}
 }
 
 #endif
