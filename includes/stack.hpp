@@ -48,7 +48,7 @@ namespace ft
 		{
 			return(this->_c.back());
 		}
-		const	value_type &	top()
+		const	value_type &	top() const
 		{
 			return(this->_c.back());
 		}
@@ -57,7 +57,7 @@ namespace ft
 		{
 			this->_c.push_back(val);
 		}
-		void	push()
+		void	pop()
 		{
 			this->_c.pop_back();
 		}
@@ -74,7 +74,7 @@ namespace ft
 		template<typename T, typename _Container>
 	inline bool operator== ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
 	{
-		return __x.c == __y.c;
+		return __x._c == __y._c;
 	}
 
 		/********************************/
@@ -83,7 +83,7 @@ namespace ft
 	template<typename T, typename _Container>
 	inline bool	operator< ( const stack<T, _Container>& __x, const stack<T, _Container>& __y )
 	{
-		return __x.c < __y.c;
+		return __x._c < __y._c;
 
 	}
 

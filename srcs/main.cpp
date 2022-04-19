@@ -1,6 +1,7 @@
 #include "../includes/stack.hpp"
 
 #include <stack>
+#include <vector>
 
 # define RED "\x1B[31m"
 # define GREEN "\x1B[32m"
@@ -186,7 +187,7 @@ void	S_testRelationalOperators(void)
 		std::cout << "std_stack2 is bigger or equal than std_stack1" << std::endl << std::endl;
 }
 
-void	testStack(void)
+int	main(void)
 {
 
 	/* ------------------------------------------------------------- */
