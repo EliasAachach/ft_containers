@@ -35,6 +35,11 @@ namespace ft
 		public:
 		
 		/********************************/
+		/*		   CONSTRUCTORS			*/
+		/********************************/
+		rbTree()
+
+		/********************************/
 		/*		MEMBER	TYPE			*/
 		/********************************/
 					bool _comp(value_type a, value_type b, Compare cmp = Compare())
