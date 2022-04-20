@@ -12,7 +12,7 @@ namespace ft
 		public:
 
 		/********************************/
-		/*			TYPEDEFS			*/
+		/*			TYPEDEF				*/
 		/********************************/
 			typedef T	value_type;
 
