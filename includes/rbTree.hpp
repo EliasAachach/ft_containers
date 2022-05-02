@@ -3,6 +3,7 @@
 
 #include "rbTreeNode.hpp"
 #include <functional>
+#include <memory>
 
 namespace ft
 {
@@ -30,289 +31,122 @@ namespace ft
 		/*		PRIVATE MEMBERS			*/
 		/********************************/
 		node_pointer	_root;
+		node_pointer	_emptyNode;
+		node_pointer	_leftLeaf;
+		node_pointer	_rightLeaf;
 		node_allocator	_node_alloc;
+		size_t			_countNode;
 
 		public:
 		
 		/********************************/
 		/*		   CONSTRUCTORS			*/
 		/********************************/
-		rbTree()
+		
+		/* default */
+		rbTree(const node_allocator& node_alloc = node_allocator()) : _node_alloc(node_allocator)
+		{
+			Node tmp;
 
+			this->_root = NULL;
+			this->_emptyNode = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_emptyNode, tmp);
+			this->_leftLeaf = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_leftLeaf, tmp);
+			this->_rightLeaf = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_rightLeaf, tmp);
+			this->_countNode = 0;
+		}
+
+		/* copy */
+		rbTree(const rbTree & src)
+		{
+			Node 		tmp;
+			iterator	it;
+
+			this->_root = NULL;
+			this->_emptyNode = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_emptyNode, tmp);
+			this->_leftLeaf = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_leftLeaf, tmp);
+			this->_rightLeaf = this->_node_alloc.allocate(1);
+			this->_node_alloc.construct(this->_rightLeaf, tmp);
+
+			it = src.begin();
+			while (it != src.end())
+			{
+				insert(*it);
+				it++;
+			}
+			this->_countNode = 0;
+		}
+
+		/* destructor */
+		~rbTree()
+		{
+			delete_tree(this->_root);
+			this->_node_alloc.destroy(this->_emptyNode);
+			this->_node_alloc.deallocate(this->_emptyNode, 1);
+			this->_node_alloc.destroy(this->_leftLeaf);
+			this->_node_alloc.deallocate(this->_leftLeaf, 1);
+			this->_node_alloc.destroy(this->_rightLeaf);
+			this->_node_alloc.deallocate(this->_rightLeaf, 1);
+		}
+				
 		/********************************/
-		/*		MEMBER	TYPE			*/
+		/*		 MEMBER	FUNCTIONS		*/
 		/********************************/
-					bool _comp(value_type a, value_type b, Compare cmp = Compare())
-			{
-				return cmp(a.first, b.first);
-			}
 
-			void	leftRotate ( node_pointer node )
-			{
-				node_pointer	tmp = node->right;
+		iterator	insert(value_type to_insert)
+		{
+			node			newNode(to_insert, NULL, this->_emptyNode, this->_emptyNode, RED);
+			node_pointer	y = NULL;
+			node_pointer	x = this->_root;
+			node_pointer	insert_pointer = NULL;
 
-				node->right = tmp->left;
-				if (tmp->left != NULL && tmp->left != this->_empty)
-				{
-					tmp->left->parent = node;
-				}
-				tmp->parent = node->parent;
-				if (node->parent == NULL || node->parent == this->_empty)
-				{
-					this->_root = tmp;
-				}
-				else if (node == node->parent->left)
-				{
-					node->parent->left = tmp;
-				}
+			this->unsetHeader();
+			while (x != NULL && x != this->_emptyNode)
+			{
+				y = x;
+				if (this->_comp(newNode.data, x->data))
+					x = x->_left;
 				else
-				{
-					node->parent->right = tmp;
-				}
-				tmp->left = node;
-				node->parent = tmp;
+					x =  x->_right;
 			}
-
-			void	rightRotate ( node_pointer node )
+			newNode._parent = y;
+			newNode._color = (newNode._parent == NULL) ? BLACK : RED;
+			if (y == NULL)
 			{
-				node_pointer tmp = node->left;
-
-				node->left = tmp->right;
-				if (tmp->right != NULL && tmp->right != this->_empty)
-				{
-					tmp->right->parent = node;
-				}
-				tmp->parent = node->parent;
-				if (node->parent == NULL || node->parent == this->_empty)
-				{
-					this->_root = tmp;
-				}
-				else if (node == node->parent->right)
-				{
-					node->parent->right = tmp;
-				}
-				else
-				{
-					node->parent->left = tmp;
-				}
-				tmp->right = node;
-				node->parent = tmp;
+				this->_root = this->_node_alloc.allocate(1);
+				insert_pointer = this->_root;
 			}
-
-			void	insert_fix ( node_pointer node )
+			else if (key_compare()(newNode.data.first, y->data.first))
 			{
-				node_pointer	tmp;
-
-				while (node->parent->color == 1)
-				{
-					if (node->parent == node->parent->parent->right)
-					{
-						tmp = node->parent->parent->left;
-						if (tmp && tmp->color == 1)
-						{
-							tmp->color = 0;
-							node->parent->color = 0;
-							node->parent->parent->color = 1;
-							node = node->parent->parent;
-						}
-						else
-						{
-							if (node == node->parent->left)
-							{
-								node = node->parent;
-								rightRotate(node);
-							}
-							node->parent->color = 0;
-							node->parent->parent->color = 1;
-							leftRotate(node->parent->parent);
-						}
-					}
-					else
-					{
-						tmp = node->parent->parent->right;
-
-						if (tmp && tmp->color == 1)
-						{
-							tmp->color = 0;
-							node->parent->color = 0;
-							node->parent->parent->color = 1;
-							node = node->parent->parent;
-						}
-						else
-						{
-							if (node == node->parent->right)
-							{
-								node = node->parent;
-								leftRotate(node);
-							}
-							node->parent->color = 0;
-							node->parent->parent->color = 1;
-							rightRotate(node->parent->parent);
-						}
-					}
-					if (node == this->_root) {
-						break;
-					}
-				}
-				this->_root->color = 0;
+				y->_left = this->_node_alloc.allocate(1);
+				insert_pointer = y->_left;
 			}
-
-			void	delete_fix ( node_pointer node )
+			else
 			{
-				node_pointer	tmp;
-
-				while (node != this->_root && node->color == BLACK)
-				{
-					if (node == node->parent->left)
-					{
-						tmp = node->parent->right;
-						if (tmp->color == RED)
-						{
-							tmp->color = BLACK;
-							node->parent->color = RED;
-							leftRotate(node->parent);
-							tmp = node->parent->right;
-						}
-						if (tmp->left->color == BLACK && tmp->right->color == BLACK)
-						{
-							tmp->color = RED;
-							node = node->parent;
-						}
-						else
-						{
-							if (tmp->right->color == BLACK)
-							{
-								tmp->left->color = BLACK;
-								tmp->color = RED;
-								rightRotate(tmp);
-								tmp = node->parent->right;
-							}
-							tmp->color = node->parent->color;
-							node->parent->color = BLACK;
-							tmp->right->color = BLACK;
-							leftRotate(node->parent);
-							node = this->_root;
-						}
-					}
-					else
-					{
-						tmp = node->parent->left;
-						if (tmp->color == RED)
-						{
-							tmp->color = BLACK;
-							node->parent->color = RED;
-							rightRotate(node->parent);
-							tmp = node->parent->left;
-						}
-						if (tmp->right->color == BLACK)
-						{
-							tmp->color = RED;
-							node = node->parent;
-						}
-						else {
-							if (tmp->left->color == BLACK)
-							{
-								tmp->right->color = BLACK;
-								tmp->color = RED;
-								leftRotate(tmp);
-								tmp = node->parent->left;
-							}
-							tmp->color = node->parent->color;
-							node->parent->color = BLACK;
-							tmp->left->color = BLACK;
-							rightRotate(node->parent);
-							node = this->_root;
-						}
-					}
-				}
-				node->color = BLACK;
+				y->_right = this->_node_alloc.allocate(1);
+				insert_pointer = y->_right;
 			}
-
-			void	delete_tree ( node_pointer root )
+			this->_node_alloc.construct(insert_pointer, newNode);
+			this->_countNode++;
+			if (insert_pointer->_parent == NULL)
 			{
-				if (root != NULL)
-				{
-					delete_tree(root->left);
-					delete_tree(root->right);
-				}
-				if (root != this->_empty && root != NULL)
-				{
-					this->_node_alloc.destroy(root);
-					this->_node_alloc.deallocate(root, 1);
-				}
+				this->setHeader();
+				insert_pointer->color = BLACK;
+				return(iterator(insert_pointer));
 			}
-
-			void	rbTransplant ( node_pointer x, node_pointer y )
+			if (insert_pointer->_parent->_parent == NULL)
 			{
-				if (x->parent == NULL)
-				{
-					this->_root = y;
-				}
-				else if (x == x->parent->left)
-				{
-					x->parent->left = y;
-				}
-				else
-				{
-					x->parent->right = y;
-				}
-				y->parent = x->parent;
+				this->setHeader();
+				return(iterator(insert_pointer));
 			}
-
-			node_pointer	maximum ( node_pointer node )
-			{
-				while (node->right != this->_empty)
-				{
-					node = node->right;
-				}
-				return (node);
-			}
-
-			node_pointer	minimum ( node_pointer node )
-			{
-				while (node->left != this->_empty)
-				{
-					node = node->left;
-				}
-				return (node);
-			}
-
-			void	printTreeHelper ( node_pointer node, std::string indent, bool side ) const
-			{
-				if (node != this->_empty)
-				{
-					std::cout << indent;
-					if (side)
-					{
-						std::cout << "R----";
-						indent += "   ";
-					}
-					else
-					{
-						std::cout << "L----";
-						indent += "   ";
-					}
-
-					std::string sColor = node->color ? "🔴" : "⚫";
-					std::cout << "(" << node->data << ") (" << sColor << ")" << std::endl;
-					printTreeHelper(node->left, indent, false);
-					printTreeHelper(node->right, indent, true);
-				}
-			}
-
-			void	searchTreeHelper ( node_pointer node, value_type data ) const
-			{
-				if (node == this->_empty || *node == data)
-				{
-					return (node);
-				}
-
-				if (_comp(data, node->data))
-				{
-					return (searchTreeHelper(node, data));
-				}
-				return (searchTreeHelper(node, data));
-			}
+			insert_fix(insert_pointer);
+			this->setHeader();
+			return(iterator(insert_pointer));
+		}
 	};
 };
 

@@ -1,42 +1,64 @@
 #ifndef RBTREENODE_HPP
-# define RBTREENODE_HPP
+#define RBTREENODE_HPP
 
-# define RED 0
-# define BLACK 1
+#define RED 0
+#define BLACK 1
 
 namespace ft
 {
-	template <typename	T>
+	template <typename T>
 	class node
 	{
-		public:
-
+	public:
 		/********************************/
 		/*			TYPEDEF				*/
 		/********************************/
-			typedef T	value_type;
+		typedef T value_type;
 
-		protected:
-
+	protected:
 		/********************************/
 		/*		PRIVATE MEMBERS			*/
 		/********************************/
-			value_type	_value;
-			node		*_parent;
-			node		*_left;
-			node		*_right;
-			int			_color;
-		
-		public:
+		value_type _value;
+		node *_parent;
+		node *_left;
+		node *_right;
+		int _color;
+
+	public:
 		/********************************/
 		/*			CONSTRUCTOR			*/
 		/********************************/
 		/*default*/
-		node():	_value(T), _color(RED), _parent(NULL), _left(NULL), _right(NULL)
+		node() : _value(T()), _parent(NULL), _left(NULL), _right(NULL), _color(BLACK)
 		{
 		}
-		/*value*/
-		node(value_type value):	_value(value), _color(RED), _parent(NULL), _left(NULL), _right(NULL)
+		node(node *parent, node *left = 0, node *right = 0, int color = BLACK) : _value(T()),
+																						  _parent(parent),
+																						  _left(left),
+																						  _right(right),
+																						  _color(color)
+		{
+		}
+
+		node(const value_type &val, node *parent = 0, node *left = 0, node *right = 0,
+			 int color = BLACK) : _value(val),
+								  _parent(parent),
+								  _left(left),
+								  _right(right),
+								  _color(color)
+		{
+		}
+
+		node(const node &node) : _value(node._value),
+									_parent(node.parent),
+									_left(node.left),
+									_right(node.right),
+									_color(node.color)
+		{
+		}
+
+		~node(void)
 		{
 		}
 	};
