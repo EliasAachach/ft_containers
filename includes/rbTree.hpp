@@ -2,6 +2,7 @@
 # define RBTREE_HPP
 
 #include "rbTreeNode.hpp"
+#include "rb_tree_iterator.hpp"
 #include <functional>
 #include <memory>
 
@@ -18,9 +19,8 @@ namespace ft
 		typedef _Key		key_type;
 		typedef T			value_type;
 		typedef Alloc		allocator_type;
-		typedef _Key		key_type;
 		typedef	ft::node<T>	node;
-		typedef typename	allocator_type::template rebind<Node>::other	node_allocator;
+		typedef typename	allocator_type::template rebind<node>::other	node_allocator;
 		typedef typename	node_allocator::pointer							node_pointer;
 		typedef typename	node_allocator::reference						node_reference;
 		typedef				ft::rb_tree_iterator<T>							iterator;
@@ -44,9 +44,9 @@ namespace ft
 		/********************************/
 		
 		/* default */
-		rbTree(const node_allocator& node_alloc = node_allocator()) : _node_alloc(node_allocator)
+		rbTree(const node_allocator& node_alloc = node_allocator()) : _node_alloc(node_alloc)
 		{
-			Node tmp;
+			node tmp;
 
 			this->_root = NULL;
 			this->_emptyNode = this->_node_alloc.allocate(1);
@@ -61,7 +61,7 @@ namespace ft
 		/* copy */
 		rbTree(const rbTree & src)
 		{
-			Node 		tmp;
+			node 		tmp;
 			iterator	it;
 
 			this->_root = NULL;

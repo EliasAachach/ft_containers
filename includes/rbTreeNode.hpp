@@ -30,7 +30,7 @@ namespace ft
 		/*			CONSTRUCTOR			*/
 		/********************************/
 		/*default*/
-		node() : _value(T()), _parent(NULL), _left(NULL), _right(NULL), _color(BLACK)
+		node() : _value(T()), _parent(0), _left(0), _right(0), _color(BLACK)
 		{
 		}
 		node(node *parent, node *left = 0, node *right = 0, int color = BLACK) : _value(T()),
