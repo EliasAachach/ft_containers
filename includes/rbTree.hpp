@@ -147,6 +147,37 @@ namespace ft
 			this->setHeader();
 			return(iterator(insert_pointer));
 		}
+
+		void	deleteNode(node_pointer	to_delete)
+		{
+			node_pointer	tmp;
+			node_pointer	new_root;
+			int				original_color;
+
+			this->unsetHeader();
+			tmp = to_delete;
+			original_color = tmp->_color;
+			if (to_delete->_left == this->_emptyNode)
+			{
+				new_node = to_delete->_right;
+				rbTransplant(to_delete, to_delete->_right);
+			}
+			else if (to_delete->_right == this->_emptyNode)
+			{
+				new_node = to_delete->_left;
+				rbTransplant(to_delete, to_delete->_left);
+			}
+			else
+			{
+				tmp = minimum(to_delete->_right);
+				original_color = tmp->_color;
+				new_root = tmp->right;
+				if (tmp->parent == to_delete)
+				{
+					new_root->parent = to_delete;
+				}
+			}
+		}
 	};
 };
 
