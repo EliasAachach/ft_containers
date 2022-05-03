@@ -1,76 +1,180 @@
-#ifndef rb_tree_iterator
-# define rb_tree_iterator
+#ifndef RB_TREE_ITERATOR
+#define RB_TREE_ITERATOR
 
-# include "rbTreeNode.hpp"
-
+#include "Iterator_traits.hpp"
+#include "rbTreeNode.hpp"
+#include "rb_tree_iterator_base.hpp"
 namespace ft
 {
 	template <typename T>
-	bool		__is_leaf(ft::node<T> *__x)
+	struct rb_tree_iterator
 	{
-		if (__x->_parent == 0 && __x->_left == 0 && __x->_right == 0)
-			return (true);
-		return (false);
-	}
+		/********************************/
+		/*			TYPEDEF				*/
+		/********************************/
+		typedef T value_type;
+		typedef T *pointer;
+		typedef T &reference;
 
-	template <typename T>
-	static ft::node<T>	*_local_rb_tree_increment(ft::node<T> *__x)	throw()
-	{
-		if (__x->_right && __x->_parent != 0)
+		typedef ft::bidirectional_iterator_tag iterator_category;
+		typedef ptrdiff_t difference_type;
+		typedef rb_tree_iterator<T> _Self;
+		typedef typename node<T>::node_pointer _node_pointer;
+
+		/********************************/
+		/*			MEMBER				*/
+		/********************************/
+		_node_pointer _node_;
+
+		/********************************/
+		/*		   CONSTRUCTORS			*/
+		/********************************/
+		rb_tree_iterator() : _node_(0)
 		{
-			__x = __x->_right;
-			while(__x->_left && __x->_left->_parent != 0)
-				__x = __x->_left;
 		}
-		else
+
+		explicit rb_tree_iterator(_node_pointer __x) : _node_(__x)
 		{
-			ft::node<T>	*__y = __x->_parent;
-			while (__x == __y->_right)
-			{
-				__x = __y;
-				__y = __y->_parent;
-			}
-			if (__x->_right != __y)
-				__x = __y;
 		}
-		return (__x);
-	}
 
-	template <typename T>
-	ft::node<T>		*_rb_tree_increment(ft::node<T>	*__x)	throw()
-	{
-		return(_local_rb_tree_increment(__x));
-	}
-	template <typename T>
-	const ft::node<T>		*_rb_tree_increment(const ft::node<T>	*__x)	throw()
-	{
-		return(_local_rb_tree_increment(const_cast<ft::node<T>*>(__x)));
-	}
-
-	template <typename T>
-	static	ft::node<T>		*_local_rb_tree_decrement(ft::node<T> *__x)	throw()
-	{
-		if (__x->_color = RED && __x->_parent->_parent == __x)
-			__x = __x->_right;
-		else if (__x->_left != 0 && !__is_leaf(__x->_left))
+		/********************************/
+		/*		 	OVERLOADS			*/
+		/********************************/
+		reference operator*() const
 		{
-			ft::node<T>	*__y = __x->_left;
-			while(__y->_right != 0 && !__is_leaf(__y->_right))
-				__y = __y->_right;
-			__x =  __y;
+			return (_node_->_value);
 		}
-		return (__x);
-	}
+		pointer operator->() const
+		{
+			return (&(_node_->_value));
+		}
+		_Self &operator++(void)
+		{
+			this->_node_ = ft::_rb_tree_increment(this->_node_);
+			return (*this);
+		}
+		_Self operator++(int)
+		{
+			_Self __tmp = *this;
+
+			this->_node_ = ft::_rb_tree_increment(this->_node_);
+			return (__tmp);
+		}
+		_Self &operator--(void)
+		{
+			this->_node_ = ft::_rb_tree_decrement(this->_node_);
+			return (*this);
+		}
+		_Self operator--(int)
+		{
+			_Self __tmp = *this;
+
+			this->_node_ = ft::_rb_tree_decrement(this->_node_);
+			return (__tmp);
+		}
+		bool operator==(const _Self &rhs)
+		{
+			return (this->_node_ == rhs._node_);
+		}
+		bool operator!=(const _Self &rhs)
+		{
+			return (this->_node_ != rhs._node_);
+		}
+	};
 
 	template <typename T>
-	ft::node<T>		*_rb_tree_decrement(ft::node<T>	*__x)	throw()
+	struct rb_tree_const_iterator
 	{
-		return(_local_rb_tree_decrement(__x));
+		/********************************/
+		/*			TYPEDEF				*/
+		/********************************/
+		typedef T value_type;
+		typedef const T *pointer;
+		typedef const T &reference;
+
+		typedef rb_tree_iterator<T> iterator;
+		typedef ft::bidirectional_iterator_tag iterator_category;
+		typedef ptrdiff_t difference_type;
+		typedef rb_tree_const_iterator<T> _Self;
+		typedef typename node<T>::const_node_pointer _node_pointer;
+
+		/********************************/
+		/*			MEMBER				*/
+		/********************************/
+		_node_pointer _node_;
+
+		/********************************/
+		/*		   CONSTRUCTORS			*/
+		/********************************/
+		rb_tree_const_iterator() : _node_(0)
+		{
+		}
+
+		explicit rb_tree_const_iterator(_node_pointer __x) : _node_(__x)
+		{
+		}
+
+		rb_tree_const_iterator(const iterator &it) : _node_(it._node_)
+		{
+		}
+
+		/********************************/
+		/*		 	OVERLOADS			*/
+		/********************************/
+		iterator _const_cast(void) const
+		{
+			return (iterator(const_cast<typename iterator::_node_pointer>(_node_)));
+		}
+		reference operator*() const
+		{
+			return (_node_->_value);
+		}
+		pointer operator->() const
+		{
+			return (&(_node_->_value));
+		}
+		_Self &operator++(void)
+		{
+			this->_node_ = ft::_rb_tree_increment(this->_node_);
+			return (*this);
+		}
+		_Self operator++(int)
+		{
+			_Self __tmp = *this;
+
+			this->_node_ = ft::_rb_tree_increment(this->_node_);
+			return (__tmp);
+		}
+		_Self &operator--(void)
+		{
+			this->_node_ = ft::_rb_tree_decrement(this->_node_);
+			return (*this);
+		}
+		_Self operator--(int)
+		{
+			_Self __tmp = *this;
+
+			this->_node_ = ft::_rb_tree_decrement(this->_node_);
+			return (__tmp);
+		}
+		bool operator==(const _Self &rhs)
+		{
+			return (this->_node_ == rhs._node_);
+		}
+		bool operator!=(const _Self &rhs)
+		{
+			return (this->_node_ != rhs._node_);
+		}
+	};
+	template <typename T>
+	inline bool operator==(const rb_tree_iterator<T> &lhs, const rb_tree_const_iterator<T> &rhs)
+	{
+		return (lhs._node_ == rhs._node_);
 	}
 	template <typename T>
-	const ft::node<T>		*_rb_tree_decrement(const ft::node<T>	*__x)	throw()
+	inline bool operator!=(const rb_tree_iterator<T> &lhs, const rb_tree_const_iterator<T> &rhs)
 	{
-		return(_local_rb_tree_decrement(const_cast<ft::node<T>*>(__x)));
+		return (lhs._node_ != rhs._node_);
 	}
 }
 
