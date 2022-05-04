@@ -147,7 +147,6 @@ namespace ft
 			this->setHeader();
 			return(iterator(insert_pointer));
 		}
-
 		void	deleteNode(node_pointer	to_delete)
 		{
 			node_pointer	tmp;
@@ -159,12 +158,12 @@ namespace ft
 			original_color = tmp->_color;
 			if (to_delete->_left == this->_emptyNode)
 			{
-				new_node = to_delete->_right;
+				new_root = to_delete->_right;
 				rbTransplant(to_delete, to_delete->_right);
 			}
 			else if (to_delete->_right == this->_emptyNode)
 			{
-				new_node = to_delete->_left;
+				new_root = to_delete->_left;
 				rbTransplant(to_delete, to_delete->_left);
 			}
 			else
@@ -173,10 +172,68 @@ namespace ft
 				original_color = tmp->_color;
 				new_root = tmp->right;
 				if (tmp->parent == to_delete)
-				{
 					new_root->parent = to_delete;
+				else
+				{
+					rbTransplant(tmp, tmp->right);
+					tmp->left = to_delete->left;
+					tmp->left->parent = tmp;
+					tmp->color = to_delete->color;
 				}
+				this->_node_alloc.destroy(to_delete);
+				this->_node_alloc.deallocate(to_delete, 1);
+				this->_countNode--;
+				if (original_color == BLACK)
+					delete_fix(new_root);
+				if (!is_leaf(this->_root))
+					this->setHeader();
+				else
+					this->_root = NULL;
 			}
+		}
+		void	deleteNode(value_type value)
+		{
+			node_pointer	tmp(this->_root);
+
+			while(tmp != this->_emptyNode)
+			{
+				if ((*tmp)._value == value)
+					return (deleteNode(tmp));
+				if (key_compare()(tmp->_value.first, value.first))
+					tmp = tmp->_right;
+				else
+					tmp = tmp->_left;
+			}
+		}
+		void	deleteNode(key_type key)
+		{
+			node_pointer	tmp;
+
+			tmp = search(key);
+			if (tmp != this->end())
+				deleteNode(tmp);
+		}
+
+		void	clear()
+		{
+			delete_tree(this->_root);
+			this->_root = NULL;
+			this->_countNode = 0;
+			this->_leftLeaf->_parent = NULL;
+			this->_rightLeaf->_parent = NULL;
+		}
+		
+		iterator	search(value_type value) const
+		{
+			if (this->_root != NULL)
+				return (searchTreeHelper(this->_root, value));
+			return (this->end());
+		}
+		iterator	search(key_type key) const
+		{
+			if (this->_root != NULL)
+				return (searchTreeHelper(this->_root, key));
+			return (this->end());
 		}
 	};
 };
