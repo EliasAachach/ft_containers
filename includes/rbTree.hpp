@@ -235,7 +235,70 @@ namespace ft
 				return (searchTreeHelper(this->_root, key));
 			return (this->end());
 		}
+
+		void	printTree() const
+		{
+			if (this->_root)
+			{
+				return (printTreeHelper(this->_root, "", true));
+			}
+		}
+
+		node	getRoot() const
+		{
+			return (this->_root);
+		}
+
+		iterator	end() const
+		{
+			return(this->_rightLeaf);
+		}
+
+		iterator	begin() const
+		{
+			if (this->_root == NULL)
+				return (this->end());
+			return (this->_leftLeaf->_parent);
+		}
+
+		size_t	maxSize() const
+		{
+			return (this->_node_alloc().max_size());
+		}
+
+		void	swap(rbTree & rhs)
+		{
+			rhs.unsetHeader();
+			this->unsetHeader();
+			std::swap(this->_root, rhs._root);
+			std::swap(this->_leftLeaf, rhs._leftLeaf);
+			std::swap(this->_rightLeaf, rhs._leftLeaf);
+			std::swap(this->_emptyNode, rhs._emptyNode);
+			std::swap(this->_countNode, this->_countNode);
+			if (this->_root)
+				this->setHeader();
+			if (rhs._root)
+				rhs.setHeader();
+			std::swap(this->_node_alloc, rhs._node_alloc);
+		}
+
+		size_t	getSize()
+		{
+			return (this->_countNode);
+		}
+
+		template <class T1, class T2, class T3, class T4>
+		friend inline bool operator==(const rbTree<T1, T2, T3, T4> &lhs, const rbTree<T1, T2, T3, T4> &rhs);
+		
+		template <class T1, class T2, class T3, class T4>
+		friend inline bool operator<(const rbTree<T1, T2, T3, T4> &lhs, const rbTree<T1, T2, T3, T4> &rhs);
 	};
+
+	template <class Key, class T, class Compare, class Alloc>
+	inline bool	operator==(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	{
+		return (lhs._countNode == rhs._countNode && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	}
 };
 
 #endif
