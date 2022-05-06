@@ -13,22 +13,9 @@ namespace ft
 		/********************************/
 		/*			TYPEDEF				*/
 		/********************************/
-		typedef T 					value_type;
-		typedef	T&					value_reference;
-		typedef T*					value_pointer;
+		typedef T value_type;
 
-		typedef	node<T>				node_type;
-		typedef node<T>&			node_reference;
-		typedef node<T>*			node_pointer;
-
-		typedef const T&			const_value_reference;
-		typedef const T*			const_value_pointer;
-
-		typedef const node<T>&		const_node_reference;
-		typedef const node<T>*		const_node_pointer;
-
-		typedef	std::allocator<node_type>	allocator_type;
-
+	protected:
 		/********************************/
 		/*		PRIVATE MEMBERS			*/
 		/********************************/
@@ -38,6 +25,7 @@ namespace ft
 		node *_right;
 		int _color;
 
+	public:
 		/********************************/
 		/*			CONSTRUCTOR			*/
 		/********************************/
@@ -63,10 +51,10 @@ namespace ft
 		}
 
 		node(const node &node) : _value(node._value),
-									_parent(node._parent),
-									_left(node._left),
-									_right(node._right),
-									_color(node._color)
+									_parent(node.parent),
+									_left(node.left),
+									_right(node.right),
+									_color(node.color)
 		{
 		}
 

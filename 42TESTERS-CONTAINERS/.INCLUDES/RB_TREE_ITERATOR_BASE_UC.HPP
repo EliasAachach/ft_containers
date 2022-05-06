@@ -16,7 +16,7 @@ namespace ft
 	template <typename T>
 	static ft::node<T>	*_local_rb_tree_increment(ft::node<T> *__x)	throw()
 	{
-		if (__x->_right && __x->_right->_parent != 0)
+		if (__x->_right && __x->_parent != 0)
 		{
 			__x = __x->_right;
 			while(__x->_left && __x->_left->_parent != 0)

@@ -112,7 +112,7 @@ namespace ft
 			node->_right = tmp->_left;
 			if (tmp->_left != NULL && tmp->_left != this->_emptyNode)
 				tmp->_left->_parent = node;
-			tmp->_parent = node->_parent;
+			tmp->parent = node->_parent;
 			if (node->_parent == NULL || node->_parent)
 				this->_root = tmp;
 			else if (node == node->_parent->_left)
@@ -134,7 +134,7 @@ namespace ft
 			node->_right = tmp->_right;
 			if (tmp->_right != NULL && tmp->_right != this->_emptyNode)
 				tmp->_right->_parent = node;
-			tmp->_parent = node->_parent;
+			tmp->parent = node->_parent;
 			if (node->_parent == NULL || node->_parent)
 				this->_root = tmp;
 			else if (node == node->_parent->_right)
@@ -169,7 +169,7 @@ namespace ft
 					{
 						if (node == node->_parent->_left)
 						{
-							node = node->_parent;
+							node = node->parent;
 							rightRotate(node);
 						}
 						node->_parent->_color = RED;
@@ -389,7 +389,7 @@ namespace ft
 
 			this->_rightLeaf->_parent = rightLeaf;
 			this->_rightLeaf->_parent->_right = this->_rightLeaf;
-			this->_leftLeaf->_parent = leftLeaf;
+			this->_leftLeaf = leftLeaf;
 			this->_leftLeaf->_parent->_left = this->_leftLeaf;
 			this->_emptyNode->_parent = 0;
 		}
@@ -413,7 +413,7 @@ namespace ft
 			while (x != NULL && x != this->_emptyNode)
 			{
 				y = x;
-				if (this->_comp(newNode._value, x->_value))
+				if (this->_comp(newNode.data, x->data))
 					x = x->_left;
 				else
 					x =  x->_right;
@@ -425,7 +425,7 @@ namespace ft
 				this->_root = this->_node_alloc.allocate(1);
 				insert_pointer = this->_root;
 			}
-			else if (key_compare()(newNode._value.first, y->_value.first))
+			else if (key_compare()(newNode.data.first, y->data.first))
 			{
 				y->_left = this->_node_alloc.allocate(1);
 				insert_pointer = y->_left;
@@ -440,7 +440,7 @@ namespace ft
 			if (insert_pointer->_parent == NULL)
 			{
 				this->setHeader();
-				insert_pointer->_color = BLACK;
+				insert_pointer->color = BLACK;
 				return(iterator(insert_pointer));
 			}
 			if (insert_pointer->_parent->_parent == NULL)
@@ -556,19 +556,19 @@ namespace ft
 
 		iterator	end() const
 		{
-			return(iterator(this->_rightLeaf));
+			return(this->_rightLeaf);
 		}
 
 		iterator	begin() const
 		{
 			if (this->_root == NULL)
-				return ((this->end()));
-			return (iterator(this->_leftLeaf->_parent));
+				return (this->end());
+			return (this->_leftLeaf->_parent);
 		}
 
 		size_t	maxSize() const
 		{
-			return (node_allocator().max_size());
+			return (this->_node_alloc().max_size());
 		}
 
 		void	swap(rbTree & rhs)
@@ -587,7 +587,7 @@ namespace ft
 			std::swap(this->_node_alloc, rhs._node_alloc);
 		}
 
-		size_t	getSize() const
+		size_t	getSize()
 		{
 			return (this->_countNode);
 		}

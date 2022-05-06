@@ -10,8 +10,6 @@ namespace ft
 				class _Alloc = std::allocator<ft::pair<const _Key,_T> > >
 	class map
 	{
-		public :
-
 		/********************************/
 		/*		MEMBER	TYPE			*/
 		/********************************/
@@ -63,7 +61,7 @@ namespace ft
 		private :
 			allocator_type	_alloc;
 			_Compare		_comp;
-			ft::rbTree<const key_type, value_type, key_compare, allocator_type>	_rbTree;
+			ft::rbTree<const key_type, mapped_type, key_compare, allocator_type>	_rbTree;
 		
 		/********************************/
 		/*			CONSTRUCTORS		*/
@@ -191,7 +189,7 @@ namespace ft
 		iterator insert (iterator position, const value_type& val)
 		{
 			iterator	tmp;
-
+			
 			(void)position;
 			tmp = this->_rbTree.search(val);
 			if (tmp == this->end())
@@ -281,7 +279,7 @@ namespace ft
 		}
 		const_iterator lower_bound (const key_type& key) const
 		{
-			const_iterator	lower = this->begin();
+			iterator	lower = this->begin();
 			while (lower != this->end() && key_compare()(lower->first, key))
 				lower++;
 			return (lower);
@@ -296,19 +294,19 @@ namespace ft
 		}
 		const_iterator upper_bound (const key_type& key) const
 		{
-			const_iterator	upper = this->begin();
+			iterator	upper = this->begin();
 			while (upper != this->end() && !key_compare()(upper->first, key))
 				upper++;
 			return (upper);
 		}
 
-		ft::pair<const_iterator, const_iterator>	equal_range (const key_type &key) const
+		ft::pair<const_iterator, const_iterator>	equal_range (const key_type& key) const
 		{
-			return (ft::make_pair<const_iterator, const_iterator>(lower_bound(key), upper_bound(key)));
+			ft::make_pair<iterator, iterator>(lower_bound(key), upper_bound(key));
 		}
-		ft::pair<iterator, iterator>	equal_range (const key_type &key)
+		ft::pair<iterator, iterator>	equal_range (const key_type& key)
 		{
-			return (ft::make_pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
+			ft::make_pair<iterator, iterator>(lower_bound(key), upper_bound(key));
 		}
 
 		/********************************/

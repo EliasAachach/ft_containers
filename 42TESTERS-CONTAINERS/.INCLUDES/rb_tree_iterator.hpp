@@ -3,7 +3,6 @@
 
 #include "Iterator_traits.hpp"
 #include "rbTreeNode.hpp"
-#include "rbTree.hpp"
 #include "rb_tree_iterator_base.hpp"
 namespace ft
 {
@@ -73,11 +72,11 @@ namespace ft
 			this->_node_ = ft::_rb_tree_decrement(this->_node_);
 			return (__tmp);
 		}
-		bool operator==(const _Self &rhs) const
+		bool operator==(const _Self &rhs)
 		{
 			return (this->_node_ == rhs._node_);
 		}
-		bool operator!=(const _Self &rhs) const
+		bool operator!=(const _Self &rhs)
 		{
 			return (this->_node_ != rhs._node_);
 		}
@@ -158,11 +157,11 @@ namespace ft
 			this->_node_ = ft::_rb_tree_decrement(this->_node_);
 			return (__tmp);
 		}
-		bool operator==(const _Self &rhs) const
+		bool operator==(const _Self &rhs)
 		{
 			return (this->_node_ == rhs._node_);
 		}
-		bool operator!=(const _Self &rhs) const
+		bool operator!=(const _Self &rhs)
 		{
 			return (this->_node_ != rhs._node_);
 		}
