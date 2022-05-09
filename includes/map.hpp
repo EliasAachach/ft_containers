@@ -290,15 +290,23 @@ namespace ft
 		iterator upper_bound (const key_type& key)
 		{
 			iterator	upper = this->begin();
-			while (upper != this->end() && !key_compare()(upper->first, key))
+			while (upper != this->end())
+			{
+				if (upper->first != key && !key_compare()(upper->first, key))
+					return (upper);
 				upper++;
+			}
 			return (upper);
 		}
 		const_iterator upper_bound (const key_type& key) const
 		{
 			const_iterator	upper = this->begin();
-			while (upper != this->end() && !key_compare()(upper->first, key))
+			while (upper != this->end())
+			{
+				if (upper->first != key && !key_compare()(upper->first, key))
+					return (upper);
 				upper++;
+			}
 			return (upper);
 		}
 
@@ -328,6 +336,11 @@ namespace ft
 		template<typename _K1, typename _T1, typename _C1, typename _A1>
 		friend bool	operator< (	const map<_K1, _T1, _C1, _A1>&,
 								const map<_K1, _T1, _C1, _A1>& );
+
+		void	printMap()
+		{
+			this->_rbTree.printTree();
+		}
 	};
 
 		/********************************/

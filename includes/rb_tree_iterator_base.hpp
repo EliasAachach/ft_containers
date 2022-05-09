@@ -48,16 +48,31 @@ namespace ft
 	}
 
 	template <typename T>
-	static	ft::node<T>		*_local_rb_tree_decrement(ft::node<T> *__x)	throw()
+	static ft::node<T>*	_local_rb_tree_decrement ( ft::node<T>* __x ) throw()
 	{
 		if (__x->_color == RED && __x->_parent->_parent == __x)
+		{
 			__x = __x->_right;
+		}
 		else if (__x->_left != 0 && !__is_leaf(__x->_left))
 		{
-			ft::node<T>	*__y = __x->_left;
-			while(__y->_right != 0 && !__is_leaf(__y->_right))
+			ft::node<T>* __y = __x->_left;
+			while (__y->_right != 0 && !__is_leaf(__y->_right))
+			{
 				__y = __y->_right;
-			__x =  __y;
+
+			}
+			__x = __y;
+		}
+		else
+		{
+			ft::node<T>*	__y = __x->_parent;
+			while (__x == __y->_left)
+			{
+				__x = __y;
+				__y = __y->_parent;
+			}
+			__x = __y;
 		}
 		return (__x);
 	}

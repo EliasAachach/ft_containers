@@ -51,6 +51,10 @@
 		"limits": "cpp",
 		"new": "cpp",
 		"streambuf": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"map": "cpp",
+		"ctime": "cpp",
+		"set": "cpp",
+		"iomanip": "cpp"
 	}
 }
