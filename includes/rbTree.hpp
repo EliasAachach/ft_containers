@@ -105,16 +105,20 @@ namespace ft
 			return (_cmp(a.first, b.first));
 		}
 
-		void	leftRotate(node_pointer node)
+		void	leftRotate ( node_pointer node )
 		{
 			node_pointer	tmp = node->_right;
-
+	
 			node->_right = tmp->_left;
 			if (tmp->_left != NULL && tmp->_left != this->_emptyNode)
+			{
 				tmp->_left->_parent = node;
+			}
 			tmp->_parent = node->_parent;
-			if (node->_parent == NULL || node->_parent)
+			if (node->_parent == NULL || node->_parent == this->_emptyNode)
+			{
 				this->_root = tmp;
+			}
 			else if (node == node->_parent->_left)
 			{
 				node->_parent->_left = tmp;
@@ -127,16 +131,20 @@ namespace ft
 			node->_parent = tmp;
 		}
 
-		void	rightRotate(node_pointer node)
+		void	rightRotate ( node_pointer node )
 		{
-			node_pointer	tmp = node->_left;
-
-			node->_right = tmp->_right;
+			node_pointer tmp = node->_left;
+	
+			node->_left = tmp->_right;
 			if (tmp->_right != NULL && tmp->_right != this->_emptyNode)
+			{
 				tmp->_right->_parent = node;
+			}
 			tmp->_parent = node->_parent;
-			if (node->_parent == NULL || node->_parent)
+			if (node->_parent == NULL || node->_parent == this->_emptyNode)
+			{
 				this->_root = tmp;
+			}
 			else if (node == node->_parent->_right)
 			{
 				node->_parent->_right = tmp;
@@ -149,63 +157,62 @@ namespace ft
 			node->_parent = tmp;
 		}
 
-			void	insert_fix ( node_pointer node )
-			{
-				node_pointer	tmp;
+		void	insert_fix ( node_pointer node )
+		{
+			node_pointer	tmp;
 
-				while (node->_parent->_color == 1)
+			while (node->_parent->_color == RED)
+			{
+				if (node->_parent == node->_parent->_parent->_right)
 				{
-					if (node->_parent == node->_parent->_parent->_right)
+					tmp = node->_parent->_parent->_left;
+					if (tmp && tmp->_color == RED)
 					{
-						tmp = node->_parent->_parent->_left;
-						if (tmp && tmp->_color == 1)
-						{
-							tmp->_color = 0;
-							node->_parent->_color = 0;
-							node->_parent->_parent->_color = 1;
-							node = node->_parent->_parent;
-						}
-						else
-						{
-							if (node == node->_parent->_left)
-							{
-								node = node->_parent;
-								rightRotate(node);
-							}
-							node->_parent->_color = 0;
-							node->_parent->_parent->_color = 1;
-							leftRotate(node->_parent->_parent);
-						}
+						tmp->_color = BLACK;
+						node->_parent->_color = BLACK;
+						node->_parent->_parent->_color = RED;
+						node = node->_parent->_parent;
 					}
 					else
 					{
-						tmp = node->_parent->_parent->_right;
-
-						if (tmp && tmp->_color == 1)
+						if (node == node->_parent->_left)
 						{
-							tmp->_color = 0;
-							node->_parent->_color = 0;
-							node->_parent->_parent->_color = 1;
-							node = node->_parent->_parent;
+							node = node->_parent;
+							rightRotate(node);  
 						}
-						else
-						{
-							if (node == node->_parent->_right)
-							{
-								node = node->_parent;
-								leftRotate(node);
-							}
-							node->_parent->_color = 0;
-							node->_parent->_parent->_color = 1;
-							rightRotate(node->_parent->_parent);
-						}
-					}
-					if (node == this->_root) {
-						break;
+						node->_parent->_color = BLACK;
+						node->_parent->_parent->_color = RED;
+						leftRotate(node->_parent->_parent);
 					}
 				}
-				this->_root->_color = 0;
+				else
+				{
+					tmp = node->_parent->_parent->_right;
+					if (tmp && tmp->_color == RED)
+					{
+						tmp->_color = BLACK;
+						node->_parent->_color = BLACK;
+						node->_parent->_parent->_color = RED;
+						node = node->_parent->_parent;
+					}
+					else
+					{
+						if (node == node->_parent->_right)
+						{
+							node = node->_parent;
+							leftRotate(node);
+						}
+						node->_parent->_color = BLACK;
+						node->_parent->_parent->_color = RED;
+						rightRotate(node->_parent->_parent);
+					}
+				}
+				if (node == this->_root) {
+					break;
+				}
 			}
+			this->_root->_color = BLACK;
+		}
 
 		void	delete_fix(node_pointer	node)
 		{
@@ -351,7 +358,7 @@ namespace ft
 						std::cout << "L----";
 						indent += "   ";
 					}
-					std::string sColor = node->_color ? "🔴" : "⚫";
+					std::string sColor = node->_color ? "⚫" : "🔴";
 					std::cout << "(" << node->_value.first << ") (" << sColor << ")" << std::endl;
 					printTreeHelper(node->_left, indent, false);
 					printTreeHelper(node->_right, indent, true);
@@ -404,112 +411,56 @@ namespace ft
 				this->_leftLeaf->_parent->_left = this->_emptyNode;
 		}
 
-iterator	insert ( value_type	to_insert )
+		iterator	insert(value_type to_insert)
+		{
+			node			newNode(to_insert, NULL, this->_emptyNode, this->_emptyNode, RED);
+			node_pointer	y = NULL;
+			node_pointer	x = this->_root;
+			node_pointer	insert_pointer = NULL;
+
+			this->unsetHeader();
+			while (x != NULL && x != this->_emptyNode)
 			{
-				node			new_one(to_insert, NULL, this->_emptyNode, this->_emptyNode, RED);
-				node_pointer	y = NULL;
-				node_pointer	x = this->_root;
-				node_pointer	insert_pos = NULL;
-
-				this->unsetHeader();
-				while (x != NULL && x != this->_emptyNode)
-				{
-					y = x;
-					if (_comp(new_one._value, x->_value))
-					{
-						x = x->_left;
-					}
-					else
-					{
-						x = x->_right;
-					}
-				}
-				new_one._parent = y;
-				new_one._color = (new_one._parent == NULL) ? BLACK : RED;
-				if (y == NULL)
-				{
-					this->_root = _node_alloc.allocate(1);
-					insert_pos = this->_root;
-				}
-				else if (key_compare()(new_one._value.first, y->_value.first))
-				{
-					y->_left = _node_alloc.allocate(1);
-					insert_pos = y->_left;
-				}
+				y = x;
+				if (this->_comp(newNode._value, x->_value))
+					x = x->_left;
 				else
-				{
-					y->_right = _node_alloc.allocate(1);
-					insert_pos = y->_right;
-				}
-				this->_node_alloc.construct(insert_pos, new_one);
-				this->_countNode++;
-				if (insert_pos->_parent == NULL)
-				{
-					this->setHeader();
-					insert_pos->_color = BLACK;
-					return (iterator(insert_pos));
-				}
-				if (insert_pos->_parent->_parent == NULL)
-				{
-					this->setHeader();
-					return (iterator(insert_pos));
-				}
-				insert_fix(insert_pos);
-				this->setHeader();
-				return (iterator(insert_pos));
+					x =  x->_right;
 			}
-
-
-		// iterator	insert(value_type to_insert)
-		// {
-		// 	node			newNode(to_insert, NULL, this->_emptyNode, this->_emptyNode, RED);
-		// 	node_pointer	y = NULL;
-		// 	node_pointer	x = this->_root;
-		// 	node_pointer	insert_pointer = NULL;
-
-		// 	this->unsetHeader();
-		// 	while (x != NULL && x != this->_emptyNode)
-		// 	{
-		// 		y = x;
-		// 		if (this->_comp(newNode._value, x->_value))
-		// 			x = x->_left;
-		// 		else
-		// 			x =  x->_right;
-		// 	}
-		// 	newNode._parent = y;
-		// 	newNode._color = (newNode._parent == NULL) ? BLACK : RED;
-		// 	if (y == NULL)
-		// 	{
-		// 		this->_root = this->_node_alloc.allocate(1);
-		// 		insert_pointer = this->_root;
-		// 	}
-		// 	else if (key_compare()(newNode._value.first, y->_value.first))
-		// 	{
-		// 		y->_left = this->_node_alloc.allocate(1);
-		// 		insert_pointer = y->_left;
-		// 	}
-		// 	else
-		// 	{
-		// 		y->_right = this->_node_alloc.allocate(1);
-		// 		insert_pointer = y->_right;
-		// 	}
-		// 	this->_node_alloc.construct(insert_pointer, newNode);
-		// 	this->_countNode++;
-		// 	if (insert_pointer->_parent == NULL)
-		// 	{
-		// 		this->setHeader();
-		// 		insert_pointer->_color = BLACK;
-		// 		return(iterator(insert_pointer));
-		// 	}
-		// 	if (insert_pointer->_parent->_parent == NULL)
-		// 	{
-		// 		this->setHeader();
-		// 		return(iterator(insert_pointer));
-		// 	}
-		// 	insert_fix(insert_pointer);
-		// 	this->setHeader();
-		// 	return(iterator(insert_pointer));
-		// }
+			newNode._parent = y;
+			newNode._color = (newNode._parent == NULL) ? BLACK : RED;
+			if (y == NULL)
+			{
+				this->_root = this->_node_alloc.allocate(1);
+				insert_pointer = this->_root;
+			}
+			else if (key_compare()(newNode._value.first, y->_value.first))
+			{
+				y->_left = this->_node_alloc.allocate(1);
+				insert_pointer = y->_left;
+			}
+			else
+			{
+				y->_right = this->_node_alloc.allocate(1);
+				insert_pointer = y->_right;
+			}
+			this->_node_alloc.construct(insert_pointer, newNode);
+			this->_countNode++;
+			if (insert_pointer->_parent == NULL)
+			{
+				this->setHeader();
+				insert_pointer->_color = BLACK;
+				return(iterator(insert_pointer));
+			}
+			if (insert_pointer->_parent->_parent == NULL)
+			{
+				this->setHeader();
+				return(iterator(insert_pointer));
+			}
+			insert_fix(insert_pointer);
+			this->setHeader();
+			return(iterator(insert_pointer));
+		}
 
 		void	deleteNode(node_pointer	to_delete)
 		{
@@ -534,15 +485,15 @@ iterator	insert ( value_type	to_insert )
 			{
 				tmp = minimum(to_delete->_right);
 				original_color = tmp->_color;
-				new_root = tmp->right;
-				if (tmp->parent == to_delete)
-					new_root->parent = to_delete;
+				new_root = tmp->_right;
+				if (tmp->_parent == to_delete)
+					new_root->_parent = to_delete;
 				else
 				{
-					rbTransplant(tmp, tmp->right);
-					tmp->left = to_delete->left;
-					tmp->left->parent = tmp;
-					tmp->color = to_delete->color;
+					rbTransplant(tmp, tmp->_right);
+					tmp->_left = to_delete->_left;
+					tmp->_left->_parent = tmp;
+					tmp->_color = to_delete->_color;
 				}
 				this->_node_alloc.destroy(to_delete);
 				this->_node_alloc.deallocate(to_delete, 1);
