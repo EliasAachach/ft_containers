@@ -232,7 +232,7 @@ namespace ft
 					if (tmp->_left->_color == BLACK && tmp->_right->_color == BLACK)
 					{
 						tmp->_color = RED;
-						node = node->parent;
+						node = node->_parent;
 					}
 					else
 					{
@@ -262,7 +262,7 @@ namespace ft
 					}
 					if (tmp->_right->_color == BLACK)
 					{
-						tmp->color = RED;
+						tmp->_color = RED;
 						node = node->_parent;
 					}
 					else
@@ -500,7 +500,7 @@ namespace ft
 				this->_countNode--;
 				if (original_color == BLACK)
 					delete_fix(new_root);
-				if (!is_leaf(this->_root))
+				if (!isLeaf(this->_root))
 					this->setHeader();
 				else
 					this->_root = NULL;

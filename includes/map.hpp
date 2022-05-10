@@ -207,7 +207,7 @@ namespace ft
 
 		void erase (iterator position)
 		{
-			this->_rbTree.deleteNode(position);
+			this->_rbTree.deleteNode(*position);
 		}
 		size_type erase (const key_type& key)
 		{
