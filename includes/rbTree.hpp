@@ -314,7 +314,7 @@ namespace ft
 				x->_parent->_left = y;
 			else
 				x->_parent->_right = y;
-			x->_parent = y->_parent;
+			y->_parent = x->_parent;
 		}
 
 		node_pointer	maximum(node_pointer node)
