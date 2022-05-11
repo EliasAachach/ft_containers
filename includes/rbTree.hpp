@@ -601,7 +601,7 @@ namespace ft
 			std::swap(this->_leftLeaf, rhs._leftLeaf);
 			std::swap(this->_rightLeaf, rhs._leftLeaf);
 			std::swap(this->_emptyNode, rhs._emptyNode);
-			std::swap(this->_countNode, this->_countNode);
+			std::swap(this->_countNode, rhs._countNode);
 			if (this->_root)
 				this->setHeader();
 			if (rhs._root)

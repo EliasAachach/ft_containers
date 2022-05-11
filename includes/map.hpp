@@ -91,7 +91,7 @@ namespace ft
 			{
 			}
 			/*operator=*/
-			map	&operator=(map & rhs)
+			map	&operator=(const map & rhs)
 			{
 				if (&rhs == this)
 					return (*this);
@@ -127,20 +127,20 @@ namespace ft
 
 		reverse_iterator	rbegin()
 		{
-			return (this->end());
+			return (reverse_iterator(this->end()));
 		}
 		const_reverse_iterator	rbegin() const
 		{
-			return (this->end());
+			return (const_reverse_iterator(this->end()));
 		}
 		
 		reverse_iterator	rend()
 		{
-			return (this->begin());
+			return (reverse_iterator(this->begin()));
 		}
 		const_reverse_iterator	rend() const
 		{
-			return (this->begin());
+			return (const_reverse_iterator(this->begin()));
 		}
 
 		/********************************/

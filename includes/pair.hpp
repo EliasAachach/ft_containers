@@ -103,5 +103,19 @@ namespace ft
 	}
 };
 
+template <typename T, typename U>
+std::ostream &operator<<(std::ostream &os, const ft::pair<T, U> &pair)
+{
+	os << "[" << pair.first << "]=\"" << pair.second << "\"";
+	return os;
+}
+template <typename T, typename U>
+std::ostream &operator<<(std::ostream &os, const std::pair<T, U> &pair)
+{
+	os << "[" << pair.first << "]=\"" << pair.second << "\"";
+	return os;
+}
+
+
 
 #endif
