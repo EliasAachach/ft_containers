@@ -7,7 +7,6 @@
 #include "pair.hpp"
 #include <functional>
 #include <memory>
-
 namespace ft
 {
 	template <class _Key, class T, class Compare = std::less<_Key>, class Alloc = std::allocator<T> >
@@ -462,35 +461,42 @@ namespace ft
 			return(iterator(insert_pointer));
 		}
 
-		void	deleteNode(node_pointer	to_delete)
-		{
-			node_pointer	tmp;
-			node_pointer	new_root;
-			int				original_color;
 
-			this->unsetHeader();
-			tmp = to_delete;
-			original_color = tmp->_color;
-			if (to_delete->_left == this->_emptyNode)
+		void	deleteNode ( node_pointer to_delete )
 			{
-				new_root = to_delete->_right;
-				rbTransplant(to_delete, to_delete->_right);
-			}
-			else if (to_delete->_right == this->_emptyNode)
-			{
-				new_root = to_delete->_left;
-				rbTransplant(to_delete, to_delete->_left);
-			}
-			else
-			{
-				tmp = minimum(to_delete->_right);
+				node_pointer	tmp;
+				node_pointer	new_root;
+				int				original_color;
+
+				this->unsetHeader();
+				tmp = to_delete;
 				original_color = tmp->_color;
-				new_root = tmp->_right;
-				if (tmp->_parent == to_delete)
-					new_root->_parent = to_delete;
+				if (to_delete->_left == this->_emptyNode)
+				{
+					new_root = to_delete->_right;
+					rbTransplant(to_delete, to_delete->_right);
+				}
+				else if (to_delete->_right == this->_emptyNode)
+				{
+					new_root = to_delete->_left;
+					rbTransplant(to_delete, to_delete->_left);
+				}
 				else
 				{
-					rbTransplant(tmp, tmp->_right);
+					tmp = minimum(to_delete->_right);
+					original_color = tmp->_color;
+					new_root = tmp->_right;
+					if (tmp->_parent == to_delete)
+					{
+						new_root->_parent = tmp;
+					}
+					else
+					{
+						rbTransplant(tmp, tmp->_right);
+						tmp->_right = to_delete->_right;
+						tmp->_right->_parent = tmp;
+					}
+					rbTransplant(to_delete, tmp);
 					tmp->_left = to_delete->_left;
 					tmp->_left->_parent = tmp;
 					tmp->_color = to_delete->_color;
@@ -499,13 +505,17 @@ namespace ft
 				this->_node_alloc.deallocate(to_delete, 1);
 				this->_countNode--;
 				if (original_color == BLACK)
+				{
 					delete_fix(new_root);
+				}
 				if (!isLeaf(this->_root))
 					this->setHeader();
 				else
+				{
 					this->_root = NULL;
+				}
 			}
-		}
+
 		void	deleteNode(value_type value)
 		{
 			node_pointer	tmp(this->_root);
@@ -606,49 +616,52 @@ namespace ft
 
 		template <class T1, class T2, class T3, class T4>
 		friend inline bool operator==(const rbTree<T1, T2, T3, T4> &lhs, const rbTree<T1, T2, T3, T4> &rhs);
-		
+
 		template <class T1, class T2, class T3, class T4>
 		friend inline bool operator<(const rbTree<T1, T2, T3, T4> &lhs, const rbTree<T1, T2, T3, T4> &rhs);
 	};
 
-	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator==(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+
+	template <class _Key, class T, class Compare, class Alloc>
+	inline bool	operator== (	const rbTree<_Key, T, Compare, Alloc> &__lhs,
+								const rbTree<_Key, T, Compare, Alloc> &__rhs )
 	{
-		return (lhs._countNode == rhs._countNode && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (	__lhs._countNode == __rhs._countNode &&
+					ft::equal(__lhs.begin(), __lhs.end(), __rhs.begin()));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator!=(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline bool	operator!=(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		return (lhs != rhs);
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator<(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline bool	operator<(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator>(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline bool	operator>(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		return (lhs < rhs);
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator<=(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline bool	operator<=(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		return (!(lhs < rhs));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline bool	operator>=(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline bool	operator>=(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		return (!(rhs < lhs));
 	}
 
 	template <class Key, class T, class Compare, class Alloc>
-	inline void	swap(const rbTree<Key, T, Compare, Alloc> & lhs, rbTree<Key, T, Compare, Alloc> & rhs)
+	inline void	swap(const rbTree<Key, T, Compare, Alloc> & lhs, const rbTree<Key, T, Compare, Alloc> & rhs)
 	{
 		rhs.swap(lhs);
 	}

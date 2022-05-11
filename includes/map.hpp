@@ -209,6 +209,7 @@ namespace ft
 		{
 			this->_rbTree.deleteNode(*position);
 		}
+
 		size_type erase (const key_type& key)
 		{
 			iterator	tmp = this->_rbTree.search(key);
@@ -350,14 +351,14 @@ namespace ft
 	inline bool	operator== (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
 								const map<_Key, _Tp, _Compare, _Alloc>& __y )
 	{
-		return (__x._rb_tree == __y._rb_tree);
+		return (__x._rbTree == __y._rbTree);
 	}
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
 	inline bool	operator< (	const map<_Key, _Tp, _Compare, _Alloc>& __x,
 							const map<_Key, _Tp, _Compare, _Alloc>& __y )
 	{
-		return (__x._rb_tree < __y._rb_tree);
+		return (__x._rbTree < __y._rbTree);
 	}
 
 	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
