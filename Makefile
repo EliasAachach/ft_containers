@@ -49,7 +49,7 @@ ECHO				:= echo
 ES_ERASE			:= "\033[1A\033[2K\033[1A"
 ERASE				:= $(ECHO) $(ES_ERASE)
 
-all: vector.ft vector.std map.ft map.std stack.ft stack.std
+all: vector.ft map.ft stack.ft vector.std map.std stack.std
 
 vector.%:
 	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(VECTOR_TARGET)
@@ -60,6 +60,11 @@ map.%:
 stack.%:
 	$(MAKE) VERSION=$* $(TARGETDIR)/$*$(STACK_TARGET)
 
+fclean: clean
+	@$(RM) -f *.d *.o
+	@$(RM) -rf $(BUILDDIR)ft
+	@$(RM) -rf $(BUILDDIR)std
+
 clean:
 	@$(RM) -rf $(TARGETDIR)/ft$(VECTOR_TARGET)
 	@$(RM) -rf $(TARGETDIR)/std$(VECTOR_TARGET)
@@ -68,11 +73,6 @@ clean:
 	@$(RM) -rf $(TARGETDIR)/ft$(STACK_TARGET)
 	@$(RM) -rf $(TARGETDIR)/std$(STACK_TARGET)
 
-fclean: clean
-	@$(RM) -f *.d *.o
-	@$(RM) -f std_*.txt ft_*.txt
-	@$(RM) -rf $(BUILDDIR)ft
-	@$(RM) -rf $(BUILDDIR)std
 
 -include $(VECTOR_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 -include $(MAP_OBJECTS:.$(OBJEXT)=.$(DEPEXT))
